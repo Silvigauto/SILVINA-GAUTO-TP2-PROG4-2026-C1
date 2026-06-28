@@ -1,0 +1,38 @@
+.contenedor-login {
+  max-width: 400px;
+  margin: 100px auto;
+  background-color: #fff;
+  padding: 40px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+}
+
+.contenedor-login h2 {
+  margin-bottom: 24px;
+  font-size: 22px;
+}
+
+.grupo-campo {
+  margin-bottom: 16px;
+}
+
+.grupo-campo label {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.contenedor-login button {
+  width: 100%;
+  margin-top: 8px;
+}
+
+.contenedor-login p {
+  margin-top: 16px;
+  font-size: 14px;
+  text-align: center;
+}
+.logo {
+  display: block;
+  width: 60px;
+  margin: 0 auto 16px auto;
+}

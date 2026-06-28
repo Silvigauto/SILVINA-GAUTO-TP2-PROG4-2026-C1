@@ -1,0 +1,29 @@
+.contenedor-perfil {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+nav {
+  padding: 16px 0;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 24px;
+}
+
+.datos-perfil {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 24px;
+}
+
+.datos-perfil h2 {
+  font-size: 22px;
+  margin-bottom: 12px;
+}
+
+.datos-perfil p {
+  font-size: 14px;
+  margin-bottom: 8px;
+  color: #444;
+}
