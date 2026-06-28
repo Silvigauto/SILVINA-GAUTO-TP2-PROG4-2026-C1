@@ -1,4 +1,5 @@
 export const environment = {
-  production: false,
-  apiUrl: 'http://localhost:3000'
+  production: true,
+  apiUrl: 'silvina-gauto-tp-2-prog-4-2026-c1-f.vercel.app'
+
 };
