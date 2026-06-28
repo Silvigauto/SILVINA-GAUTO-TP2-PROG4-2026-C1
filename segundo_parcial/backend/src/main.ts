@@ -10,7 +10,7 @@ async function bootstrap() {
   
   app.useGlobalPipes(new ValidationPipe({whitelist: true}))
   
-  app.enableCors({origin '*'}); //para que pueda correr desde dos puertos distintos y no de error
+  app.enableCors({origin: '*'}); //para que pueda correr desde dos puertos distintos y no de error
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();
