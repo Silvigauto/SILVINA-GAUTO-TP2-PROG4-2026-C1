@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule, DatePipe } from '@angular/common';
 import { Publicaciones } from '../../services/publicaciones';
@@ -14,7 +14,11 @@ export class MiPerfil implements OnInit {
   usuario: any = JSON.parse(localStorage.getItem('usuario') || '{}');
   misPublicaciones: any[] = [];
 
-  constructor(private servPublicaciones: Publicaciones, private enrutador: Router) {}
+  constructor(
+    private servPublicaciones: Publicaciones,
+    private enrutador: Router,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit() {
     this.cargarMisPublicaciones();
@@ -23,7 +27,8 @@ export class MiPerfil implements OnInit {
   cargarMisPublicaciones() {
     this.servPublicaciones.listar('fecha', 3, 0, this.usuario._id).subscribe({
       next: (respuesta: any) => {
-        this.misPublicaciones = respuesta;
+        this.misPublicaciones = [...respuesta];
+        this.cdr.detectChanges();
       },
       error: (error) => console.error(error)
     });
