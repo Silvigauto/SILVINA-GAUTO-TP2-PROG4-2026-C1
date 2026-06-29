@@ -5,8 +5,24 @@
 
   <div class="datos-perfil">
     <h2>{{ usuario.nombre }} {{ usuario.apellido }}</h2>
-    <p>{{ usuario.email }}</p>
-    <p>{{ usuario.username }}</p>
-    <p>{{ usuario.descripcion }}</p>
+    <p><strong>Usuario:</strong> {{ usuario.username }}</p>
+    <p><strong>Correo:</strong> {{ usuario.email }}</p>
+    <p><strong>Descripción:</strong> {{ usuario.descripcion }}</p>
+  </div>
+
+  <div class="mis-publicaciones">
+    <h3>Mis últimas publicaciones</h3>
+
+    @if (misPublicaciones.length === 0) {
+      <p>No tenés publicaciones todavía</p>
+    }
+
+    @for (publicacion of misPublicaciones; track publicacion._id) {
+      <div class="publicacion">
+        <h4>{{ publicacion.titulo }}</h4>
+        <p>{{ publicacion.mensaje }}</p>
+        <p>{{ publicacion.createdAt | date:'dd/MM/yyyy' }}</p>
+      </div>
+    }
   </div>
 </div>

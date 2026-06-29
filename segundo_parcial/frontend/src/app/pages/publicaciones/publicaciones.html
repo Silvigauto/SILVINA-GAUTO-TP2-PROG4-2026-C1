@@ -4,7 +4,36 @@
     <button (click)="irAMiPerfil()">Mi Perfil</button>
   </nav>
 
+  <div class="formulario-publicacion">
+    <h3>Nueva publicación</h3>
+    <input type="text" [(ngModel)]="nuevaPublicacion.titulo" placeholder="Título"/>
+    <textarea [(ngModel)]="nuevaPublicacion.mensaje" placeholder="¿Qué estás pensando?"></textarea>
+    <button (click)="crearPublicacion()">Publicar</button>
+  </div>
+
   <div class="lista-publicaciones">
-    <p>No hay publicaciones todavía</p>
+    @if (listadoPublicaciones.length === 0) {
+      <p>No hay publicaciones todavía</p>
+    }
+
+    @for (publicacion of listadoPublicaciones; track publicacion._id) {
+      <div class="publicacion">
+        <div class="publicacion-header">
+          <strong>{{ publicacion.usuario.nombre }} {{ publicacion.usuario.apellido }}</strong>
+          <span>{{ publicacion.createdAt | date:'dd/MM/yyyy' }}</span>
+        </div>
+        <h3>{{ publicacion.titulo }}</h3>
+        <p>{{ publicacion.mensaje }}</p>
+        <div class="publicacion-acciones">
+          <button (click)="toggleLike(publicacion)">
+            {{ publicacion.likes.includes(usuarioActual._id) ? 'Quitar like' : 'Me gusta' }}
+            ({{ publicacion.likes.length }})
+          </button>
+          @if (publicacion.usuario._id === usuarioActual._id) {
+            <button (click)="eliminar(publicacion._id)">Eliminar</button>
+          }
+        </div>
+      </div>
+    }
   </div>
 </div>

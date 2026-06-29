@@ -15,6 +15,7 @@ nav {
   border: 1px solid #ddd;
   border-radius: 6px;
   padding: 24px;
+  margin-bottom: 24px;
 }
 
 .datos-perfil h2 {
@@ -26,4 +27,34 @@ nav {
   font-size: 14px;
   margin-bottom: 8px;
   color: #444;
+}
+
+
+
+.mis-publicaciones h3 {
+  font-size: 18px;
+  margin-bottom: 16px;
+}
+
+.publicacion {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 20px;
+  margin-bottom: 16px;
+}
+
+.publicacion h4 {
+  margin-bottom: 8px;
+}
+
+.publicacion p {
+  font-size: 14px;
+  margin-bottom: 8px;
+  color: #444;
+}
+
+.publicacion-fecha {
+  font-size: 12px;
+  color: #888;
 }
