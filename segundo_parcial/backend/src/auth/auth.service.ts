@@ -5,7 +5,7 @@ import { Usuario } from './entities/usuario.schema';
 import { RegistroDto } from './dto/registro.dto';
 import { LoginDto } from './dto/login.dto';
 import * as bcrypt from 'bcrypt';
-import { sign } from 'jsonwebtoken';
+import { sign, verify } from 'jsonwebtoken';
 
 @Injectable()
 export class AuthService {
@@ -67,4 +67,33 @@ export class AuthService {
       throw new UnauthorizedException('Usuario o contraseña incorrectos');
     }
   }
+
+  async autorizar(token: string) {
+    try {
+      const verificado = verify(token, process.env.CLAVE_SUPERSECRETA!);
+      const { _id } = verificado as { _id: string };
+      const usuario = await this.usuarioModel.findById(_id);
+      if (!usuario) throw new Error();
+      return usuario;
+    } catch {
+      throw new UnauthorizedException('Token inválido');
+    }
+  }
+
+async refrescar(token: string) {
+  try {
+    const verificado = verify(token, process.env.CLAVE_SUPERSECRETA!);
+    const { email, _id, rol } = verificado as { email: string; _id: string; rol: string };
+
+    const nuevoToken = sign(
+      { email, _id, rol },
+      process.env.CLAVE_SUPERSECRETA!,
+      { algorithm: 'HS256', expiresIn: '15m' }
+    );
+
+    return { token: nuevoToken };
+  } catch {
+    throw new UnauthorizedException('Token inválido');
+  }
+}
 }

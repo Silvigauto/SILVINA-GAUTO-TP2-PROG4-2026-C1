@@ -39,4 +39,30 @@ listar(orden?: string, limite?: number, offset?: number, usuarioId?: string) {
   quitarLike(id: string) {
     return this.http.delete(`${this.url}/publicaciones/${id}/like`, { headers: this.obtenerHeaders() });
   }
+
+  agregarComentario(publicacionId: string, mensaje: string) {
+    return this.http.post(
+      `${this.url}/publicaciones/${publicacionId}/comentarios`,
+      { mensaje },
+      { headers: this.obtenerHeaders() }
+    );
+  }
+
+  editarComentario(publicacionId: string, comentarioId: string, mensaje: string) {
+    return this.http.put(
+      `${this.url}/publicaciones/${publicacionId}/comentarios/${comentarioId}`,
+      { mensaje },
+      { headers: this.obtenerHeaders() }
+    );
+  }
+
+  listarComentarios(publicacionId: string, limite: number, offset: number) {
+    return this.http.get(
+      `${this.url}/publicaciones/${publicacionId}/comentarios?limite=${limite}&offset=${offset}`
+    );
+  }
+
+  obtenerUna(id: string) {
+  return this.http.get(`${this.url}/publicaciones/${id}`);
+}
 }

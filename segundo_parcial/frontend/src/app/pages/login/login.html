@@ -7,17 +7,17 @@
     <div class="grupo-campo">
       <label>Usuario o correo</label>
       <input type="text" formControlName="usuario" placeholder="Usuario o correo"/>
-      <span *ngIf="formularioLogin.get('usuario')?.invalid && formularioLogin.get('usuario')?.touched">
-        El usuario es requerido
-      </span>
+      @if (formularioLogin.get('usuario')?.invalid && formularioLogin.get('usuario')?.touched) {
+        <span>El usuario es requerido</span>
+      }
     </div>
 
     <div class="grupo-campo">
       <label>Contraseña</label>
       <input type="password" formControlName="contraseña" placeholder="Contraseña"/>
-      <span *ngIf="formularioLogin.get('contraseña')?.invalid && formularioLogin.get('contraseña')?.touched">
-        La contraseña debe tener al menos 8 caracteres
-      </span>
+      @if (formularioLogin.get('contraseña')?.invalid && formularioLogin.get('contraseña')?.touched) {
+        <span>La contraseña debe tener al menos 8 caracteres</span>
+      }
     </div>
 
     <button type="submit" [disabled]="formularioLogin.invalid">Ingresar</button>

@@ -32,6 +32,7 @@
           @if (publicacion.usuario._id === usuarioActual._id) {
             <button (click)="eliminar(publicacion._id)">Eliminar</button>
           }
+          <button (click)="verPublicacion(publicacion._id)">Ver publicación</button>
         </div>
       </div>
     }

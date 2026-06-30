@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { Injectable, EventEmitter} from '@angular/core';
+import { HttpClient,HttpHeaders } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -7,6 +7,8 @@ import { environment } from '../../environments/environment';
 })
 export class Auth {
   private url = environment.apiUrl;
+  loginExitoso = new EventEmitter<void>();
+
 
   constructor(private http: HttpClient) {}
 
@@ -16,5 +18,18 @@ export class Auth {
 
   login(datos: any) {
     return this.http.post(`${this.url}/auth/login`, datos);
+  }
+  autorizar() {
+  const token = localStorage.getItem('token');
+  return this.http.post(`${this.url}/auth/autorizar`, {}, {
+    headers: new HttpHeaders({ Authorization: `Bearer ${token}` })
+  });
+  }
+
+  refrescar() {
+    const token = localStorage.getItem('token');
+    return this.http.post(`${this.url}/auth/refrescar`, {}, {
+      headers: new HttpHeaders({ Authorization: `Bearer ${token}` })
+    });
   }
 }

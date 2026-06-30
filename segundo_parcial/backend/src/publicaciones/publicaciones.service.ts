@@ -3,11 +3,14 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Publicacion } from './entities/publicacion.schema';
 import { CrearPublicacionDto } from './dto/crear-publicacion.dto';
+import { Comentario } from './entities/comentario.schema';
+import { CrearComentarioDto } from './dto/crear-comentario.dto';
 
 @Injectable()
 export class PublicacionesService {
   constructor(
     @InjectModel(Publicacion.name) private publicacionModel: Model<Publicacion>,
+    @InjectModel(Comentario.name) private comentarioModel: Model<Comentario>,
   ) {}
 
   async crear(datos: CrearPublicacionDto, usuarioId: string) {
@@ -67,4 +70,40 @@ export class PublicacionesService {
     await this.publicacionModel.updateOne({ _id: id }, { $pull: { likes: usuarioId } });
     return { mensaje: 'Like eliminado' };
   }
+
+  async agregarComentario(publicacionId: string, usuarioId: string, datos: CrearComentarioDto) {
+  const comentario = await this.comentarioModel.create({
+    mensaje: datos.mensaje,
+    usuario: usuarioId,
+    publicacion: publicacionId,
+  });
+  return comentario;
+  }
+
+  async editarComentario(comentarioId: string, usuarioId: string, mensaje: string) {
+    const comentario = await this.comentarioModel.findById(comentarioId);
+    if (!comentario) throw new UnauthorizedException('Comentario no encontrado');
+    if (comentario.usuario.toString() !== usuarioId) throw new UnauthorizedException('No tenés permiso para editar este comentario');
+
+    await this.comentarioModel.updateOne({ _id: comentarioId }, { mensaje, modificado: true });
+    return { mensaje: 'Comentario editado' };
+  }
+
+  async listarComentarios(publicacionId: string, limite: number = 5, offset: number = 0) {
+    const comentarios = await this.comentarioModel
+      .find({ publicacion: publicacionId })
+      .sort({ createdAt: -1 })
+      .skip(Number(offset) || 0)
+      .limit(Number(limite) || 5)
+      .populate('usuario', 'nombre apellido username');
+
+    return comentarios;
+  }
+
+  async obtenerUna(id: string) {
+  const publicacion = await this.publicacionModel
+    .findById(id)
+    .populate('usuario', 'nombre apellido username fotoPerfil');
+  return publicacion;
+}
 }

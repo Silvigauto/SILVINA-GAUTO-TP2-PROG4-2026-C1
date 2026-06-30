@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Delete, Body, Param, Query, UseGuards, Req } from '@nestjs/common';
+import { Controller, Get, Post,Put, Delete, Body, Param, Query, UseGuards, Req } from '@nestjs/common';
 import { PublicacionesService } from './publicaciones.service';
 import { CrearPublicacionDto } from './dto/crear-publicacion.dto';
 import { TokenGuard } from '../guards/token.guard';
+import { CrearComentarioDto } from './dto/crear-comentario.dto';
 
 
 @Controller('publicaciones')
@@ -35,17 +36,54 @@ export class PublicacionesController {
   }
 
   @Post(':id/like')
+  @UseGuards(TokenGuard)
+  darLike(@Param('id') id: string, @Req() req: any) {
+    console.log('body completo:', JSON.stringify(req.body));
+    const idDelToken = req.body.idDelToken;
+    return this.publicacionesService.darLike(id, idDelToken);
+  }
+
+  @Delete(':id/like')
+  @UseGuards(TokenGuard)
+  quitarLike(@Param('id') id: string, @Req() req: any) {
+    const idDelToken = (req as any).body.idDelToken;
+    return this.publicacionesService.quitarLike(id, idDelToken);
+  }
+
+  @Post(':id/comentarios')
 @UseGuards(TokenGuard)
-darLike(@Param('id') id: string, @Req() req: any) {
-  console.log('body completo:', JSON.stringify(req.body));
+agregarComentario(
+  @Param('id') id: string,
+  @Req() req: any,
+  @Body() datos: CrearComentarioDto
+) {
   const idDelToken = req.body.idDelToken;
-  return this.publicacionesService.darLike(id, idDelToken);
+  return this.publicacionesService.agregarComentario(id, idDelToken, datos);
 }
 
-@Delete(':id/like')
-@UseGuards(TokenGuard)
-quitarLike(@Param('id') id: string, @Req() req: any) {
-  const idDelToken = (req as any).body.idDelToken;
-  return this.publicacionesService.quitarLike(id, idDelToken);
+  @Put(':id/comentarios/:comentarioId')
+  @UseGuards(TokenGuard)
+  editarComentario(
+    @Param('id') id: string,
+    @Param('comentarioId') comentarioId: string,
+    @Req() req: any,
+    @Body('mensaje') mensaje: string
+  ) {
+    const idDelToken = req.body.idDelToken;
+    return this.publicacionesService.editarComentario(comentarioId, idDelToken, mensaje);
+  }
+
+  @Get(':id/comentarios')
+  listarComentarios(
+    @Param('id') id: string,
+    @Query('limite') limite: number,
+    @Query('offset') offset: number,
+  ) {
+    return this.publicacionesService.listarComentarios(id, limite, offset);
+  }
+
+  @Get(':id')
+obtenerUna(@Param('id') id: string) {
+  return this.publicacionesService.obtenerUna(id);
 }
 }

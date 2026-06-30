@@ -73,4 +73,8 @@ export class PublicacionesPage {
   irAMiPerfil() {
     this.enrutador.navigate(['/mi-perfil']);
   }
+
+  verPublicacion(id: string) {
+  this.enrutador.navigate(['/publicacion', id]);
+  }
 }

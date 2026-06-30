@@ -1,3 +1,14 @@
-
-
 <router-outlet></router-outlet>
+
+@if (mostrarModal) {
+  <div class="overlay">
+    <div class="modal">
+      <h3>Tu sesión está por vencer</h3>
+      <p>Quedan 5 minutos de sesión. ¿Querés extenderla?</p>
+      <div class="modal-acciones">
+        <button (click)="extenderSesion()">Extender sesión</button>
+        <button (click)="cerrarSesion()">Cerrar sesión</button>
+      </div>
+    </div>
+  </div>
+}
