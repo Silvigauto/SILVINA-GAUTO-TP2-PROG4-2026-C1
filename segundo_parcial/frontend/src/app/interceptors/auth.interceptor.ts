@@ -8,7 +8,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(req).pipe(
     catchError((error) => {
-      if (error.status === 401) {
+      if (error.status === 401 && error.error?.message === 'Token inválido') {
         localStorage.removeItem('token');
         localStorage.removeItem('usuario');
         enrutador.navigate(['/login']);
