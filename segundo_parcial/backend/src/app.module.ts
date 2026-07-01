@@ -11,8 +11,8 @@ import { ValidationPipe } from '@nestjs/common';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
-    MongooseModule.forRoot(process.env.MONGO_URI!),
+    ConfigModule.forRoot({ isGlobal: true }), //variables del .env
+    MongooseModule.forRoot(process.env.MONGO_URI!),//conecta mongodb con .env
     AuthModule,
     UsuariosModule,
     PublicacionesModule,
@@ -21,7 +21,7 @@ import { ValidationPipe } from '@nestjs/common';
   providers: [
     {
       provide: APP_PIPE,
-      useClass: ValidationPipe,
+      useClass: ValidationPipe,//validator global
     },
   ],
 })

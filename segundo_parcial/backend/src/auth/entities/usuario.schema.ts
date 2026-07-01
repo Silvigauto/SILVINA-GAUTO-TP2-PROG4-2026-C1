@@ -2,35 +2,35 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
 @Schema()
 export class Usuario {
-  @Prop({ unique: true })
-  email: string;
+  @Prop({ unique: true })//no puede haber dos con el mismo valor
+  email!: string;
 
-  @Prop({ unique: true })
-  username: string;
-
-  @Prop()
-  contraseña: string;
+  @Prop({ unique: true })//no puede haber dos con el mismo valor
+  username!: string;
 
   @Prop()
-  nombre: string;
+  contraseña!: string;
 
   @Prop()
-  apellido: string;
+  nombre!: string;
 
   @Prop()
-  fechaNacimiento: Date;
+  apellido!: string;
 
   @Prop()
-  descripcion: string;
+  fechaNacimiento!: Date;
 
   @Prop()
-  fotoPerfil: string;
+  descripcion!: string;
+
+  @Prop()
+  fotoPerfil!: string;
 
   @Prop({ default: 'usuario' })
-  rol: string;
+  rol!: string;
 
   @Prop({ default: true })
-  activo: boolean;
+  activo!: boolean;
 }
 
 export const UsuarioSchema = SchemaFactory.createForClass(Usuario);

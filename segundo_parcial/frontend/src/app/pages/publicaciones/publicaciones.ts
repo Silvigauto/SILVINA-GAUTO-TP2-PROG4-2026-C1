@@ -3,11 +3,17 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Publicaciones } from '../../services/publicaciones';
 import { FormsModule } from '@angular/forms';
+import { LikesTextoPipe } from '../../pipes/likes-texto-pipe'
+import { TiempoTranscurridoPipe } from '../../pipes/tiempo-transcurrido-pipe';
+import { TruncarPipe } from '../../pipes/truncar-pipe';
+import { ConfirmarAccionDirective } from '../../directives/confirmar-accion';
+import { TooltipUsuarioDirective } from '../../directives/tooltip-usuario';
+import { AnimacionLikeDirective } from '../../directives/animacion-like';
 
 @Component({
   selector: 'app-publicaciones',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, LikesTextoPipe, TiempoTranscurridoPipe, TruncarPipe, ConfirmarAccionDirective, TooltipUsuarioDirective, AnimacionLikeDirective],
   templateUrl: './publicaciones.html',
   styleUrl: './publicaciones.css'
 })
@@ -77,4 +83,13 @@ export class PublicacionesPage {
   verPublicacion(id: string) {
   this.enrutador.navigate(['/publicacion', id]);
   }
+  irADashboard() {
+  this.enrutador.navigate(['/dashboard-usuarios']);
+}
+
+cerrarSesion() {
+  localStorage.removeItem('token');
+  localStorage.removeItem('usuario');
+  this.enrutador.navigate(['/login']);
+}
 }

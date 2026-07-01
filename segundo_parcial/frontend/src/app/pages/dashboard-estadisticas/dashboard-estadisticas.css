@@ -1,0 +1,56 @@
+.contenedor-estadisticas {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 24px;
+}
+
+nav h1 {
+  font-size: 20px;
+}
+
+.filtro-fechas {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 32px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 16px;
+}
+
+.filtro-fechas label {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.filtro-fechas input {
+  width: auto;
+}
+
+.graficos {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.grafico {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 24px;
+}
+
+.grafico h3 {
+  font-size: 16px;
+  margin-bottom: 16px;
+}

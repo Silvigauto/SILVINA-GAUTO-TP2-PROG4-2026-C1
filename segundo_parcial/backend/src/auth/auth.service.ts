@@ -20,54 +20,57 @@ export class AuthService {
       const usuarioCreado = await this.usuarioModel.create({
         ...datos,
         contraseña: contraseñaEncriptada,
-      });
+  });
 
-      const payload = {
-        email: usuarioCreado.email,
-        _id: usuarioCreado._id,
-        rol: usuarioCreado.rol,
-      };
+  const payload = {
+    email: usuarioCreado.email,
+    _id: usuarioCreado._id,
+    rol: usuarioCreado.rol,
+  };
 
-      const jwt = sign(payload, process.env.CLAVE_SUPERSECRETA!, {
-        algorithm: 'HS256',
-        expiresIn: '15m',
-      });
+  const jwt = sign(payload, process.env.CLAVE_SUPERSECRETA!, {//generar el token jwt
+    algorithm: 'HS256',
+    expiresIn: '15m',
+  });
 
-      return { token: jwt, usuario: usuarioCreado };
+  return { token: jwt, usuario: usuarioCreado };
     } catch {
       throw new UnauthorizedException('Error al registrar el usuario');
     }
   }
 
-  async login(datos: LoginDto) {
-    try {
-      const usuario = await this.usuarioModel.findOne({
-        $or: [{ email: datos.usuario }, { username: datos.usuario }],
-      });
+ async login(datos: LoginDto) {
+  try {
+    const usuario = await this.usuarioModel.findOne({
+      $or: [{ email: datos.usuario }, { username: datos.usuario }],
+    });
 
-      if (!usuario) throw new Error();
+    if (!usuario) throw new Error();
 
-      const contraseñaValida = await bcrypt.compare(datos.contraseña, usuario.contraseña);
+    const contraseñaValida = await bcrypt.compare(datos.contraseña, usuario.contraseña);
+    if (!contraseñaValida) throw new Error();
 
-      if (!contraseñaValida) throw new Error();
-
-      const payload = {
-        email: usuario.email,
-        _id: usuario._id,
-        rol: usuario.rol,
-      };
-
-      const jwt = sign(payload, process.env.CLAVE_SUPERSECRETA!, {
-        algorithm: 'HS256',
-        expiresIn: '15m',
-      });
-
-      return { token: jwt, usuario };
-    } catch {
-      throw new UnauthorizedException('Usuario o contraseña incorrectos');
+    if (!usuario.activo) {
+      throw new UnauthorizedException('Tu cuenta está deshabilitada');
     }
-  }
 
+    const payload = {
+      email: usuario.email,
+      _id: usuario._id,
+      rol: usuario.rol,
+    };
+
+    const jwt = sign(payload, process.env.CLAVE_SUPERSECRETA!, {
+      algorithm: 'HS256',
+      expiresIn: '15m',
+    });
+
+    return { token: jwt, usuario };
+  } catch {
+    throw new UnauthorizedException('Usuario o contraseña incorrectos');
+  }
+}
+  //para la pantalla de cargando
   async autorizar(token: string) {
     try {
       const verificado = verify(token, process.env.CLAVE_SUPERSECRETA!);
@@ -80,7 +83,8 @@ export class AuthService {
     }
   }
 
-async refrescar(token: string) {
+  //para el modal de sesion
+  async refrescar(token: string) {
   try {
     const verificado = verify(token, process.env.CLAVE_SUPERSECRETA!);
     const { email, _id, rol } = verificado as { email: string; _id: string; rol: string };

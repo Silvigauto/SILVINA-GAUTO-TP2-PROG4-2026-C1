@@ -2,24 +2,24 @@ import { IsString, IsEmail, IsDateString, MinLength } from 'class-validator';
 
 export class RegistroDto {
   @IsString()
-  nombre: string;
+  nombre!: string;
 
   @IsString()
-  apellido: string;
+  apellido!: string;
 
   @IsEmail()
-  email: string;
+  email!: string;
 
   @IsString()
-  username: string;
+  username!: string;
 
   @IsString()
   @MinLength(8)
-  contraseña: string;
+  contraseña!: string;
 
   @IsDateString()
-  fechaNacimiento: string;
+  fechaNacimiento!: string;
 
   @IsString()
-  descripcion: string;
+  descripcion!: string;
 }

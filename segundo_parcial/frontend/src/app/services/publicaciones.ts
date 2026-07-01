@@ -65,4 +65,5 @@ listar(orden?: string, limite?: number, offset?: number, usuarioId?: string) {
   obtenerUna(id: string) {
   return this.http.get(`${this.url}/publicaciones/${id}`);
 }
+
 }

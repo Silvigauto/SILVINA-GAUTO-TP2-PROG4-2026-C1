@@ -1,0 +1,31 @@
+<div class="contenedor-estadisticas">
+  <nav>
+    <h1>Dashboard - Estadísticas</h1>
+    <button (click)="volver()">Volver</button>
+  </nav>
+
+  <div class="filtro-fechas">
+    <label>Desde:</label>
+    <input type="date" [(ngModel)]="desde"/>
+    <label>Hasta:</label>
+    <input type="date" [(ngModel)]="hasta"/>
+    <button (click)="cargarEstadisticas()">Filtrar</button>
+  </div>
+
+  <div class="graficos">
+    <div class="grafico">
+      <h3>Publicaciones por usuario</h3>
+      <canvas id="graficoPublicaciones"></canvas>
+    </div>
+
+    <div class="grafico">
+      <h3>Comentarios por día</h3>
+      <canvas id="graficoComentariosTiempo"></canvas>
+    </div>
+
+    <div class="grafico">
+      <h3>Comentarios por publicación</h3>
+      <canvas id="graficoComentariosPublicacion"></canvas>
+    </div>
+  </div>
+</div>

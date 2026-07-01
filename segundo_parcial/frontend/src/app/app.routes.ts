@@ -6,6 +6,9 @@ import { MiPerfil } from './pages/mi-perfil/mi-perfil';
 import { Cargando } from './pages/cargando/cargando';
 import { Publicacion } from './pages/publicacion/publicacion';
 import { authGuard } from '../app/guards/auth.guard';
+import { DashboardUsuarios } from './pages/dashboard-usuarios/dashboard-usuarios';
+import { DashboardEstadisticas } from './pages/dashboard-estadisticas/dashboard-estadisticas';
+import { adminGuard } from './guards/admin.guard';
 
 
 export const routes: Routes = [
@@ -16,4 +19,8 @@ export const routes: Routes = [
   { path: 'publicaciones', component: PublicacionesPage, canActivate: [authGuard] },
   { path: 'mi-perfil', component: MiPerfil, canActivate: [authGuard] },
   { path: 'publicacion/:id', component: Publicacion, canActivate: [authGuard] },
+  { path: 'dashboard-usuarios', component: DashboardUsuarios, canActivate: [authGuard] },
+  { path: 'dashboard-estadisticas', component: DashboardEstadisticas, canActivate: [authGuard] },
+  { path: 'dashboard-usuarios', component: DashboardUsuarios, canActivate: [authGuard, adminGuard] },
+{ path: 'dashboard-estadisticas', component: DashboardEstadisticas, canActivate: [authGuard, adminGuard] },
 ];

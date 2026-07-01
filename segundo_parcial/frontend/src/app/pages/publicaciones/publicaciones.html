@@ -2,6 +2,10 @@
   <nav>
     <h1>Red Social</h1>
     <button (click)="irAMiPerfil()">Mi Perfil</button>
+    @if (usuarioActual.rol === 'administrador') {
+      <button (click)="irADashboard()">Dashboard</button>
+    }
+    <button (click)="cerrarSesion()">Cerrar sesión</button>
   </nav>
 
   <div class="formulario-publicacion">
@@ -19,20 +23,26 @@
     @for (publicacion of listadoPublicaciones; track publicacion._id) {
       <div class="publicacion">
         <div class="publicacion-header">
-          <strong>{{ publicacion.usuario.nombre }} {{ publicacion.usuario.apellido }}</strong>
-          <span>{{ publicacion.createdAt | date:'dd/MM/yyyy' }}</span>
+          <strong [tooltipUsuario]="publicacion.usuario">
+            {{ publicacion.usuario.nombre }} {{ publicacion.usuario.apellido }}
+          </strong>
+          <span>{{ publicacion.createdAt | tiempoTranscurrido }}</span>
         </div>
         <h3>{{ publicacion.titulo }}</h3>
-        <p>{{ publicacion.mensaje }}</p>
+        <p>{{ publicacion.mensaje | truncar:150 }}</p>
         <div class="publicacion-acciones">
-          <button (click)="toggleLike(publicacion)">
-            {{ publicacion.likes.includes(usuarioActual._id) ? 'Quitar like' : 'Me gusta' }}
-            ({{ publicacion.likes.length }})
+          <button animacionLike (click)="toggleLike(publicacion)">
+            {{ publicacion.likes.length | likesTexto }}
           </button>
-          @if (publicacion.usuario._id === usuarioActual._id) {
-            <button (click)="eliminar(publicacion._id)">Eliminar</button>
-          }
           <button (click)="verPublicacion(publicacion._id)">Ver publicación</button>
+          @if (publicacion.usuario._id === usuarioActual._id || usuarioActual.rol === 'administrador') {
+            <button 
+              confirmarAccion
+              mensajeConfirmacion="¿Estás seguro que querés eliminar esta publicación?"
+              (accionConfirmada)="eliminar(publicacion._id)">
+              Eliminar
+            </button>
+          }
         </div>
       </div>
     }

@@ -4,6 +4,8 @@ import { PublicacionesService } from './publicaciones.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Publicacion, PublicacionSchema } from './entities/publicacion.schema';
 import { Comentario, ComentarioSchema } from './entities/comentario.schema';
+import { EstadisticasController } from './estadisticas.controller';
+import { EstadisticasService } from './estadisticas.service';
 
 @Module({
   imports: [
@@ -12,7 +14,7 @@ import { Comentario, ComentarioSchema } from './entities/comentario.schema';
       { name: Comentario.name, schema: ComentarioSchema }
     ])
   ],
-  controllers: [PublicacionesController],
-  providers: [PublicacionesService],
+  controllers: [PublicacionesController, EstadisticasController],
+  providers: [PublicacionesService, EstadisticasService],
 })
 export class PublicacionesModule {}

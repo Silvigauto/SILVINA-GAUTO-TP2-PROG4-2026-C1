@@ -1,0 +1,50 @@
+<div class="contenedor-dashboard">
+  <nav>
+    <h1>Dashboard - Usuarios</h1>
+    <button (click)="volver()">Volver</button>
+    <button (click)="irAEstadisticas()">Estadísticas</button>
+
+  </nav>
+
+  <button (click)="mostrarFormulario = !mostrarFormulario">
+    {{ mostrarFormulario ? 'Cancelar' : 'Nuevo usuario' }}
+  </button>
+
+  @if (mostrarFormulario) {
+    <div class="formulario-usuario">
+      <h3>Nuevo usuario</h3>
+      <input type="text" [(ngModel)]="nuevoUsuario.nombre" placeholder="Nombre"/>
+      <input type="text" [(ngModel)]="nuevoUsuario.apellido" placeholder="Apellido"/>
+      <input type="email" [(ngModel)]="nuevoUsuario.email" placeholder="Correo"/>
+      <input type="text" [(ngModel)]="nuevoUsuario.username" placeholder="Nombre de usuario"/>
+      <input type="password" [(ngModel)]="nuevoUsuario.contrasena" placeholder="Contraseña"/>
+      <input type="date" [(ngModel)]="nuevoUsuario.fechaNacimiento"/>
+      <textarea [(ngModel)]="nuevoUsuario.descripcion" placeholder="Descripción"></textarea>
+      <select [(ngModel)]="nuevoUsuario.rol">
+        <option value="usuario">Usuario</option>
+        <option value="administrador">Administrador</option>
+      </select>
+      <button (click)="crearUsuario()">Crear</button>
+    </div>
+  }
+
+  <div class="lista-usuarios">
+    @for (usuario of listadoUsuarios; track usuario._id) {
+      <div class="usuario" [class.deshabilitado]="!usuario.activo">
+        <div class="usuario-info">
+          <strong>{{ usuario.nombre }} {{ usuario.apellido }}</strong>
+          <span>{{ usuario.email }}</span>
+          <span>{{ usuario.rol }}</span>
+          <span>{{ usuario.activo ? 'Activo' : 'Deshabilitado' }}</span>
+        </div>
+        <div class="usuario-acciones">
+          @if (usuario.activo) {
+            <button (click)="deshabilitar(usuario._id)">Deshabilitar</button>
+          } @else {
+            <button (click)="habilitar(usuario._id)">Habilitar</button>
+          }
+        </div>
+      </div>
+    }
+  </div>
+</div>
