@@ -1,13 +1,9 @@
 <div class="contenedor-publicacion">
-  <nav>
-    <button (click)="volver()">Volver</button>
-  </nav>
-
   @if (publicacion) {
-    <div class="publicacion-detalle">
+    <div class="card publicacion-detalle">
       <div class="publicacion-header">
         <strong>{{ publicacion.usuario.nombre }} {{ publicacion.usuario.apellido }}</strong>
-        <span>{{ publicacion.createdAt | date:'dd/MM/yyyy' }}</span>
+        <span class="texto-secundario">{{ publicacion.createdAt | date:'dd/MM/yyyy' }}</span>
       </div>
       <h2>{{ publicacion.titulo }}</h2>
       <p>{{ publicacion.mensaje }}</p>
@@ -15,35 +11,37 @@
   }
 
   <div class="seccion-comentarios">
-    <h3>Comentarios</h3>
+    <h3 class="titulo-seccion">Comentarios</h3>
 
-    <div class="nuevo-comentario">
+    <div class="card nuevo-comentario">
       <textarea [(ngModel)]="nuevoComentario" placeholder="Escribí un comentario..."></textarea>
-      <button (click)="agregarComentario()">Comentar</button>
+      <button class="btn-primario" (click)="agregarComentario()">Comentar</button>
     </div>
 
     @for (comentario of comentarios; track comentario._id) {
-      <div class="comentario">
+      <div class="card comentario">
         <strong>{{ comentario.usuario.nombre }} {{ comentario.usuario.apellido }}</strong>
 
         @if (comentarioEditandoId === comentario._id) {
           <textarea [(ngModel)]="mensajeEditando"></textarea>
-          <button (click)="guardarEdicion(comentario)">Guardar</button>
-          <button (click)="cancelarEdicion()">Cancelar</button>
+          <div class="comentario-acciones">
+            <button class="btn-primario" (click)="guardarEdicion(comentario)">Guardar</button>
+            <button class="btn-secundario" (click)="cancelarEdicion()">Cancelar</button>
+          </div>
         } @else {
           <p>{{ comentario.mensaje }}</p>
           @if (comentario.modificado) {
-            <small>(editado)</small>
+            <small class="texto-secundario">(editado)</small>
           }
           @if (comentario.usuario._id === usuarioActual._id) {
-            <button (click)="iniciarEdicion(comentario)">Editar</button>
+            <button class="btn-secundario" (click)="iniciarEdicion(comentario)">Editar</button>
           }
         }
       </div>
     }
 
     @if (hayMas) {
-      <button (click)="cargarMas()">Cargar más</button>
+      <button class="btn-secundario" (click)="cargarMas()">Cargar más</button>
     }
   </div>
 </div>

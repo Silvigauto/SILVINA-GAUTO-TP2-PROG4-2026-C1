@@ -43,83 +43,67 @@ export class DashboardEstadisticas implements OnInit {
   }
 
   cargarEstadisticas() {
-  this.servEstadisticas.publicacionesPorUsuario(this.desde, this.hasta).subscribe({
-    next: (respuesta: any) => {
-      this.datosPublicaciones = respuesta;
-      this.renderizarGraficoPublicaciones();
-    },
-    error: (error) => console.error(error)
-  });
+    this.servEstadisticas.publicacionesPorUsuario(this.desde, this.hasta).subscribe({
+      next: (respuesta: any) => {
+        this.datosPublicaciones = respuesta;
+        this.renderizarGraficoPublicaciones();
+      },
+      error: (error) => console.error(error)
+    });
 
-  this.servEstadisticas.comentariosPorTiempo(this.desde, this.hasta).subscribe({
-    next: (respuesta: any) => {
-      this.datosComentariosTiempo = respuesta;
-      this.renderizarGraficoComentariosTiempo();
-    },
-    error: (error) => console.error(error)
-  });
+    this.servEstadisticas.comentariosPorTiempo(this.desde, this.hasta).subscribe({
+      next: (respuesta: any) => {
+        this.datosComentariosTiempo = respuesta;
+        this.renderizarGraficoComentariosTiempo();
+      },
+      error: (error) => console.error(error)
+    });
 
-  this.servEstadisticas.comentariosPorPublicacion(this.desde, this.hasta).subscribe({
-    next: (respuesta: any) => {
-      this.datosComentariosPublicacion = respuesta;
-      this.renderizarGraficoComentariosPublicacion();
-    },
-    error: (error) => console.error(error)
-  });
-}
+    this.servEstadisticas.comentariosPorPublicacion(this.desde, this.hasta).subscribe({
+      next: (respuesta: any) => {
+        this.datosComentariosPublicacion = respuesta;
+        this.renderizarGraficoComentariosPublicacion();
+      },
+      error: (error) => console.error(error)
+    });
+  }
 
-renderizarGraficoPublicaciones() {
-  if (this.graficoPublicaciones) this.graficoPublicaciones.destroy();
-  const canvas = document.getElementById('graficoPublicaciones') as HTMLCanvasElement;
-  if (!canvas) return;
-  this.graficoPublicaciones = new Chart(canvas, {
-    type: 'bar',
-    data: {
-      labels: this.datosPublicaciones.map(d => `${d.nombre} ${d.apellido}`),
-      datasets: [{
-        label: 'Publicaciones',
-        data: this.datosPublicaciones.map(d => d.total),
-        backgroundColor: '#444'
-      }]
-    }
-  });
-}
+  renderizarGraficoPublicaciones() {
+    if (this.graficoPublicaciones) this.graficoPublicaciones.destroy();
+    const canvas = document.getElementById('graficoPublicaciones') as HTMLCanvasElement;
+    if (!canvas) return;
+    this.graficoPublicaciones = new Chart(canvas, {
+      type: 'bar',
+      data: {
+        labels: this.datosPublicaciones.map(d => `${d.nombre} ${d.apellido}`),
+        datasets: [{ label: 'Publicaciones', data: this.datosPublicaciones.map(d => d.total), backgroundColor: '#444' }]
+      }
+    });
+  }
 
-renderizarGraficoComentariosTiempo() {
-  if (this.graficoComentariosTiempo) this.graficoComentariosTiempo.destroy();
-  const canvas = document.getElementById('graficoComentariosTiempo') as HTMLCanvasElement;
-  if (!canvas) return;
-  this.graficoComentariosTiempo = new Chart(canvas, {
-    type: 'line',
-    data: {
-      labels: this.datosComentariosTiempo.map(d => d._id),
-      datasets: [{
-        label: 'Comentarios',
-        data: this.datosComentariosTiempo.map(d => d.total),
-        borderColor: '#444',
-        fill: false
-      }]
-    }
-  });
-}
+  renderizarGraficoComentariosTiempo() {
+    if (this.graficoComentariosTiempo) this.graficoComentariosTiempo.destroy();
+    const canvas = document.getElementById('graficoComentariosTiempo') as HTMLCanvasElement;
+    if (!canvas) return;
+    this.graficoComentariosTiempo = new Chart(canvas, {
+      type: 'line',
+      data: {
+        labels: this.datosComentariosTiempo.map(d => d._id),
+        datasets: [{ label: 'Comentarios', data: this.datosComentariosTiempo.map(d => d.total), borderColor: '#444', fill: false }]
+      }
+    });
+  }
 
-renderizarGraficoComentariosPublicacion() {
-  if (this.graficoComentariosPublicacion) this.graficoComentariosPublicacion.destroy();
-  const canvas = document.getElementById('graficoComentariosPublicacion') as HTMLCanvasElement;
-  if (!canvas) return;
-  this.graficoComentariosPublicacion = new Chart(canvas, {
-    type: 'pie',
-    data: {
-      labels: this.datosComentariosPublicacion.map(d => d.titulo),
-      datasets: [{
-        data: this.datosComentariosPublicacion.map(d => d.total),
-        backgroundColor: ['#222', '#555', '#888', '#aaa', '#ccc']
-      }]
-    }
-  });
-}
-
-  volver() {
-    this.enrutador.navigate(['/dashboard-usuarios']);
+  renderizarGraficoComentariosPublicacion() {
+    if (this.graficoComentariosPublicacion) this.graficoComentariosPublicacion.destroy();
+    const canvas = document.getElementById('graficoComentariosPublicacion') as HTMLCanvasElement;
+    if (!canvas) return;
+    this.graficoComentariosPublicacion = new Chart(canvas, {
+      type: 'pie',
+      data: {
+        labels: this.datosComentariosPublicacion.map(d => d.titulo),
+        datasets: [{ data: this.datosComentariosPublicacion.map(d => d.total), backgroundColor: ['#222', '#555', '#888', '#aaa', '#ccc'] }]
+      }
+    });
   }
 }

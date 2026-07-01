@@ -50,7 +50,8 @@ export class DashboardUsuarios implements OnInit {
   }
 
   crearUsuario() {
-    this.servUsuarios.crear(this.nuevoUsuario).subscribe({
+    const datos = { ...this.nuevoUsuario, contraseña: this.nuevoUsuario.contrasena };
+    this.servUsuarios.crear(datos).subscribe({
       next: () => {
         this.mostrarFormulario = false;
         this.nuevoUsuario = { nombre: '', apellido: '', email: '', username: '', contrasena: '', fechaNacimiento: '', descripcion: '', rol: 'usuario' };
@@ -72,12 +73,5 @@ export class DashboardUsuarios implements OnInit {
       next: () => this.cargarUsuarios(),
       error: (error) => console.error(error)
     });
-  }
-
-  volver() {
-    this.enrutador.navigate(['/publicaciones']);
-  }
-  irAEstadisticas() {
-    this.enrutador.navigate(['/dashboard-estadisticas']);
   }
 }

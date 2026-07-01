@@ -1,47 +1,47 @@
 <div class="contenedor-registro">
-    <img src="/favicon.png" alt="logo" class="logo"/>
-  <h2>Registrarse</h2>
+  <img src="/favicon.png" alt="logo" class="logo"/>
+  <h2 class="titulo-seccion">Registrarse</h2>
 
   <form [formGroup]="formularioRegistro" (ngSubmit)="alEnviar()">
 
     <div class="grupo-campo">
       <label>Nombre</label>
       <input type="text" formControlName="nombre" placeholder="Nombre"/>
-      <span *ngIf="formularioRegistro.get('nombre')?.invalid && formularioRegistro.get('nombre')?.touched">
-        El nombre es requerido
-      </span>
+      @if (formularioRegistro.get('nombre')?.invalid && formularioRegistro.get('nombre')?.touched) {
+        <span>El nombre es requerido</span>
+      }
     </div>
 
     <div class="grupo-campo">
       <label>Apellido</label>
       <input type="text" formControlName="apellido" placeholder="Apellido"/>
-      <span *ngIf="formularioRegistro.get('apellido')?.invalid && formularioRegistro.get('apellido')?.touched">
-        El apellido es requerido
-      </span>
+      @if (formularioRegistro.get('apellido')?.invalid && formularioRegistro.get('apellido')?.touched) {
+        <span>El apellido es requerido</span>
+      }
     </div>
 
     <div class="grupo-campo">
       <label>Correo</label>
       <input type="email" formControlName="email" placeholder="Correo"/>
-      <span *ngIf="formularioRegistro.get('email')?.invalid && formularioRegistro.get('email')?.touched">
-        El correo no es válido
-      </span>
+      @if (formularioRegistro.get('email')?.invalid && formularioRegistro.get('email')?.touched) {
+        <span>El correo no es válido</span>
+      }
     </div>
 
     <div class="grupo-campo">
       <label>Nombre de usuario</label>
       <input type="text" formControlName="username" placeholder="Nombre de usuario"/>
-      <span *ngIf="formularioRegistro.get('username')?.invalid && formularioRegistro.get('username')?.touched">
-        El nombre de usuario es requerido
-      </span>
+      @if (formularioRegistro.get('username')?.invalid && formularioRegistro.get('username')?.touched) {
+        <span>El nombre de usuario es requerido</span>
+      }
     </div>
 
     <div class="grupo-campo">
       <label>Contraseña</label>
       <input type="password" formControlName="contraseña" placeholder="Contraseña"/>
-      <span *ngIf="formularioRegistro.get('contraseña')?.invalid && formularioRegistro.get('contraseña')?.touched">
-        La contraseña debe tener al menos 8 caracteres, una mayúscula y un número
-      </span>
+      @if (formularioRegistro.get('contraseña')?.invalid && formularioRegistro.get('contraseña')?.touched) {
+        <span>La contraseña debe tener al menos 8 caracteres, una mayúscula y un número</span>
+      }
     </div>
 
     <div class="grupo-campo">
@@ -64,7 +64,7 @@
       <input type="file" accept="image/*" (change)="alSeleccionarImagen($event)"/>
     </div>
 
-    <button type="submit" [disabled]="formularioRegistro.invalid">Registrarse</button>
+    <button class="btn-primario" type="submit" [disabled]="formularioRegistro.invalid">Registrarse</button>
 
   </form>
 

@@ -1,45 +1,41 @@
 <div class="contenedor-publicaciones">
-  <nav>
-    <h1>Red Social</h1>
-    <button (click)="irAMiPerfil()">Mi Perfil</button>
-    @if (usuarioActual.rol === 'administrador') {
-      <button (click)="irADashboard()">Dashboard</button>
-    }
-    <button (click)="cerrarSesion()">Cerrar sesión</button>
-  </nav>
-
-  <div class="formulario-publicacion">
-    <h3>Nueva publicación</h3>
+  <div class="card formulario-publicacion">
+    <h3 class="titulo-seccion">Nueva publicación</h3>
     <input type="text" [(ngModel)]="nuevaPublicacion.titulo" placeholder="Título"/>
     <textarea [(ngModel)]="nuevaPublicacion.mensaje" placeholder="¿Qué estás pensando?"></textarea>
-    <button (click)="crearPublicacion()">Publicar</button>
+    <button class="btn-primario" (click)="crearPublicacion()">Publicar</button>
   </div>
 
   <div class="lista-publicaciones">
     @if (listadoPublicaciones.length === 0) {
-      <p>No hay publicaciones todavía</p>
+      <p class="texto-secundario">No hay publicaciones todavía</p>
     }
 
     @for (publicacion of listadoPublicaciones; track publicacion._id) {
-      <div class="publicacion">
+      <div class="card publicacion">
         <div class="publicacion-header">
           <strong [tooltipUsuario]="publicacion.usuario">
             {{ publicacion.usuario.nombre }} {{ publicacion.usuario.apellido }}
           </strong>
-          <span>{{ publicacion.createdAt | tiempoTranscurrido }}</span>
+          <span class="texto-secundario">{{ publicacion.createdAt | tiempoTranscurrido }}</span>
         </div>
         <h3>{{ publicacion.titulo }}</h3>
         <p>{{ publicacion.mensaje | truncar:150 }}</p>
         <div class="publicacion-acciones">
-          <button animacionLike (click)="toggleLike(publicacion)">
+          <button class="btn-like btn-primario" animacionLike (click)="toggleLike(publicacion)">
+            <lucide-icon [img]="Heart" size="16"></lucide-icon>
             {{ publicacion.likes.length | likesTexto }}
           </button>
-          <button (click)="verPublicacion(publicacion._id)">Ver publicación</button>
+          <button class="btn-secundario" (click)="verPublicacion(publicacion._id)">
+            <lucide-icon [img]="Eye" size="16"></lucide-icon>
+            Ver
+          </button>
           @if (publicacion.usuario._id === usuarioActual._id || usuarioActual.rol === 'administrador') {
-            <button 
+            <button class="btn-peligro"
               confirmarAccion
               mensajeConfirmacion="¿Estás seguro que querés eliminar esta publicación?"
               (accionConfirmada)="eliminar(publicacion._id)">
+              <lucide-icon [img]="Trash2" size="16"></lucide-icon>
               Eliminar
             </button>
           }

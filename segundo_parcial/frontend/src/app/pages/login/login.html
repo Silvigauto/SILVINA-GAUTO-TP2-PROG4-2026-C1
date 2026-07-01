@@ -1,6 +1,6 @@
 <div class="contenedor-login">
   <img src="/favicon.png" alt="logo" class="logo"/>
-  <h2>Iniciar sesión</h2>
+  <h2 class="titulo-seccion">Iniciar sesión</h2>
 
   <form [formGroup]="formularioLogin" (ngSubmit)="alEnviar()">
     
@@ -20,7 +20,7 @@
       }
     </div>
 
-    <button type="submit" [disabled]="formularioLogin.invalid">Ingresar</button>
+    <button class="btn-primario" type="submit" [disabled]="formularioLogin.invalid">Ingresar</button>
 
   </form>
 

@@ -1,5 +1,4 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { Router } from '@angular/router';
 import { CommonModule, DatePipe } from '@angular/common';
 import { Publicaciones } from '../../services/publicaciones';
 
@@ -16,7 +15,6 @@ export class MiPerfil implements OnInit {
 
   constructor(
     private servPublicaciones: Publicaciones,
-    private enrutador: Router,
     private cdr: ChangeDetectorRef
   ) {}
 
@@ -32,9 +30,5 @@ export class MiPerfil implements OnInit {
       },
       error: (error) => console.error(error)
     });
-  }
-
-  irAPublicaciones() {
-    this.enrutador.navigate(['/publicaciones']);
   }
 }

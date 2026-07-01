@@ -1,3 +1,53 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #FFC300;
+  padding: 0 24px;
+  height: 60px;
+  width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  font-family: 'Raleway', sans-serif;
+}
+
+.navbar-logo {
+  cursor: pointer;
+}
+
+.navbar-logo img {
+  height: 70px;
+  width: 70px;
+  object-fit: contain;
+}
+
+.navbar-botones {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.navbar-botones button {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background-color: transparent;
+  color: #1a1a1a;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-family: 'Raleway', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.navbar-botones button:hover {
+  background-color: #FFD60A;
+}
+
 .overlay {
   position: fixed;
   top: 0;

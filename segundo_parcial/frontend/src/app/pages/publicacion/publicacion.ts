@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Publicaciones } from '../../services/publicaciones';
@@ -25,7 +25,6 @@ export class Publicacion implements OnInit {
 
   constructor(
     private ruta: ActivatedRoute,
-    private enrutador: Router,
     private servPublicaciones: Publicaciones,
     private cdr: ChangeDetectorRef
   ) {}
@@ -101,7 +100,5 @@ export class Publicacion implements OnInit {
     this.mensajeEditando = '';
   }
 
-  volver() {
-    this.enrutador.navigate(['/publicaciones']);
-  }
+  
 }

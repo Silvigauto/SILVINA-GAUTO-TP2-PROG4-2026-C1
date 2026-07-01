@@ -9,11 +9,12 @@ import { TruncarPipe } from '../../pipes/truncar-pipe';
 import { ConfirmarAccionDirective } from '../../directives/confirmar-accion';
 import { TooltipUsuarioDirective } from '../../directives/tooltip-usuario';
 import { AnimacionLikeDirective } from '../../directives/animacion-like';
+import { LucideAngularModule, Heart, Eye, Trash2 } from 'lucide-angular';
 
 @Component({
   selector: 'app-publicaciones',
   standalone: true,
-  imports: [CommonModule, FormsModule, LikesTextoPipe, TiempoTranscurridoPipe, TruncarPipe, ConfirmarAccionDirective, TooltipUsuarioDirective, AnimacionLikeDirective],
+  imports: [CommonModule, FormsModule, LikesTextoPipe, TiempoTranscurridoPipe, TruncarPipe, ConfirmarAccionDirective, TooltipUsuarioDirective, AnimacionLikeDirective, LucideAngularModule],
   templateUrl: './publicaciones.html',
   styleUrl: './publicaciones.css'
 })
@@ -22,21 +23,21 @@ export class PublicacionesPage {
   usuarioActual: any = JSON.parse(localStorage.getItem('usuario') || '{}');
   offset = 0;
   limite = 10;
+  nuevaPublicacion = { titulo: '', mensaje: '' };
+  readonly Heart = Heart;
+  readonly Eye = Eye;
+  readonly Trash2 = Trash2;
 
   constructor(private servPublicaciones: Publicaciones, private enrutador: Router, private cdr: ChangeDetectorRef) {}
 
   ngOnInit() {
     this.cargarPublicaciones();
   }
-  nuevaPublicacion = { titulo: '', mensaje: '' };
 
   crearPublicacion() {
-    console.log('intentando crear:', this.nuevaPublicacion);
     if (this.nuevaPublicacion.titulo && this.nuevaPublicacion.mensaje) {
-      console.log('datos válidos, enviando...');
       this.servPublicaciones.crear(this.nuevaPublicacion).subscribe({
-        next: (respuesta) => {
-          console.log('publicación creada:', respuesta);
+        next: () => {
           this.nuevaPublicacion = { titulo: '', mensaje: '' };
           this.cargarPublicaciones();
         },
@@ -44,15 +45,16 @@ export class PublicacionesPage {
       });
     }
   }
+
   cargarPublicaciones() {
-  this.servPublicaciones.listar('fecha', this.limite, this.offset).subscribe({
-    next: (respuesta: any) => {
-      this.listadoPublicaciones = [...respuesta];
-      this.cdr.detectChanges();
-    },
-    error: (error) => console.error(error)
-  });
-}
+    this.servPublicaciones.listar('fecha', this.limite, this.offset).subscribe({
+      next: (respuesta: any) => {
+        this.listadoPublicaciones = [...respuesta];
+        this.cdr.detectChanges();
+      },
+      error: (error) => console.error(error)
+    });
+  }
 
   toggleLike(publicacion: any) {
     const yaLikeo = publicacion.likes.includes(this.usuarioActual._id);
@@ -76,20 +78,7 @@ export class PublicacionesPage {
     });
   }
 
-  irAMiPerfil() {
-    this.enrutador.navigate(['/mi-perfil']);
-  }
-
   verPublicacion(id: string) {
-  this.enrutador.navigate(['/publicacion', id]);
+    this.enrutador.navigate(['/publicacion', id]);
   }
-  irADashboard() {
-  this.enrutador.navigate(['/dashboard-usuarios']);
-}
-
-cerrarSesion() {
-  localStorage.removeItem('token');
-  localStorage.removeItem('usuario');
-  this.enrutador.navigate(['/login']);
-}
 }

@@ -1,27 +1,23 @@
 <div class="contenedor-perfil">
-  <nav>
-    <button (click)="irAPublicaciones()">Volver</button>
-  </nav>
-
-  <div class="datos-perfil">
-    <h2>{{ usuario.nombre }} {{ usuario.apellido }}</h2>
+  <div class="card datos-perfil">
+    <h2 class="titulo-seccion">{{ usuario.nombre }} {{ usuario.apellido }}</h2>
     <p><strong>Usuario:</strong> {{ usuario.username }}</p>
     <p><strong>Correo:</strong> {{ usuario.email }}</p>
     <p><strong>Descripción:</strong> {{ usuario.descripcion }}</p>
   </div>
 
   <div class="mis-publicaciones">
-    <h3>Mis últimas publicaciones</h3>
+    <h3 class="titulo-seccion">Mis últimas publicaciones</h3>
 
     @if (misPublicaciones.length === 0) {
-      <p>No tenés publicaciones todavía</p>
+      <p class="texto-secundario">No tenés publicaciones todavía</p>
     }
 
     @for (publicacion of misPublicaciones; track publicacion._id) {
-      <div class="publicacion">
+      <div class="card publicacion">
         <h4>{{ publicacion.titulo }}</h4>
         <p>{{ publicacion.mensaje }}</p>
-        <p>{{ publicacion.createdAt | date:'dd/MM/yyyy' }}</p>
+        <p class="texto-secundario">{{ publicacion.createdAt | date:'dd/MM/yyyy' }}</p>
       </div>
     }
   </div>

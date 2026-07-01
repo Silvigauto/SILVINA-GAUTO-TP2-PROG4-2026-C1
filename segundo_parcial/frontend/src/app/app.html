@@ -1,3 +1,38 @@
+@if (estaLogueado()) {
+  <nav class="navbar">
+    <div class="navbar-logo" (click)="irAPublicaciones()">
+      <img src="/favicon.png" alt="logo"/>
+    </div>
+
+    <div class="navbar-botones">
+      <button (click)="irAPublicaciones()">
+        <lucide-icon [img]="Newspaper" size="18"></lucide-icon>
+        Publicaciones
+      </button>
+      <button (click)="irAMiPerfil()">
+        <lucide-icon [img]="CircleUserRound" size="18"></lucide-icon>
+        Mi Perfil
+      </button>
+
+      @if (usuario.rol === 'administrador') {
+        <button (click)="irADashboardUsuarios()">
+          <lucide-icon [img]="Users" size="18"></lucide-icon>
+          Usuarios
+        </button>
+        <button (click)="irADashboardEstadisticas()">
+          <lucide-icon [img]="LayoutDashboard" size="18"></lucide-icon>
+          Estadísticas
+        </button>
+      }
+
+      <button (click)="cerrarSesion()">
+        <lucide-icon [img]="DoorOpen" size="18"></lucide-icon>
+        Cerrar sesión
+      </button>
+    </div>
+  </nav>
+}
+
 <router-outlet></router-outlet>
 
 @if (mostrarModal) {
