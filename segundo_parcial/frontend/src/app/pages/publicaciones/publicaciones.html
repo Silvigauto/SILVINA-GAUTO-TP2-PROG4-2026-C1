@@ -15,7 +15,7 @@
       <div class="card publicacion">
         <div class="publicacion-header">
           <strong [tooltipUsuario]="publicacion.usuario">
-            {{ publicacion.usuario.nombre }} {{ publicacion.usuario.apellido }}
+            {{ publicacion.usuario?.nombre }} {{ publicacion.usuario?.apellido }}
           </strong>
           <span class="texto-secundario">{{ publicacion.createdAt | tiempoTranscurrido }}</span>
         </div>

@@ -25,8 +25,8 @@ export class Registro {
       apellido: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       username: ['', Validators.required],
-      contraseña: ['', [Validators.required, Validators.minLength(8), Validators.pattern(/(?=.*[A-Z])(?=.*[0-9])/)]],
-      repetirContraseña: ['', Validators.required],
+      contrasena: ['', [Validators.required, Validators.minLength(8), Validators.pattern(/(?=.*[A-Z])(?=.*[0-9])/)]],
+      repetirContrasena: ['', Validators.required],
       fechaNacimiento: ['', Validators.required],
       descripcion: ['', Validators.required],
     });
@@ -41,17 +41,19 @@ export class Registro {
 
   alEnviar() {
     if (this.formularioRegistro.valid) {
-      const datos = {
-        nombre: this.formularioRegistro.value.nombre,
-        apellido: this.formularioRegistro.value.apellido,
-        email: this.formularioRegistro.value.email,
-        username: this.formularioRegistro.value.username,
-        contraseña: this.formularioRegistro.value.contraseña,
-        fechaNacimiento: this.formularioRegistro.value.fechaNacimiento,
-        descripcion: this.formularioRegistro.value.descripcion,
-      };
+      const formData = new FormData();
+      formData.append('nombre', this.formularioRegistro.value.nombre);
+      formData.append('apellido', this.formularioRegistro.value.apellido);
+      formData.append('email', this.formularioRegistro.value.email);
+      formData.append('username', this.formularioRegistro.value.username);
+      formData.append('contrasena', this.formularioRegistro.value.contrasena);
+      formData.append('fechaNacimiento', this.formularioRegistro.value.fechaNacimiento);
+      formData.append('descripcion', this.formularioRegistro.value.descripcion);
+      if (this.imagenPerfil) {
+        formData.append('foto', this.imagenPerfil);
+      }
 
-      this.servAuth.registro(datos).subscribe({
+      this.servAuth.registro(formData).subscribe({
         next: (respuesta: any) => {
           localStorage.setItem('token', respuesta.token);
           localStorage.setItem('usuario', JSON.stringify(respuesta.usuario));

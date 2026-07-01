@@ -1,17 +1,25 @@
-import { Controller, Post, Body, UseGuards, Req } from '@nestjs/common';
+import { Controller, Post, Body, UseGuards, Req , UseInterceptors, UploadedFile } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegistroDto } from './dto/registro.dto';
 import { LoginDto } from './dto/login.dto';
 import { TokenGuard } from 'src/guards/token.guard';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { CloudinaryService } from '../cloudinary/cloudinary.service';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+    constructor(private readonly authService: AuthService,
+    private readonly cloudinaryService: CloudinaryService
+  ) {}
 
   @Post('registro')
-  registro(@Body() datos: RegistroDto) {
-    return this.authService.registro(datos);
-  }
+@UseInterceptors(FileInterceptor('foto', {}))
+registro(
+  @Body() datos: any,
+  @UploadedFile() foto: Express.Multer.File
+) {
+  return this.authService.registro(datos, foto);
+}
 
   @Post('login')
   login(@Body() datos: LoginDto) {

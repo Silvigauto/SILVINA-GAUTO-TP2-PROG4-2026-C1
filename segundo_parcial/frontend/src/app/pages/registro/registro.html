@@ -38,15 +38,15 @@
 
     <div class="grupo-campo">
       <label>Contraseña</label>
-      <input type="password" formControlName="contraseña" placeholder="Contraseña"/>
-      @if (formularioRegistro.get('contraseña')?.invalid && formularioRegistro.get('contraseña')?.touched) {
+      <input type="password" formControlName="contrasena" placeholder="Contraseña"/>
+      @if (formularioRegistro.get('contrasena')?.invalid && formularioRegistro.get('contrasena')?.touched) {
         <span>La contraseña debe tener al menos 8 caracteres, una mayúscula y un número</span>
       }
     </div>
 
     <div class="grupo-campo">
       <label>Repetir contraseña</label>
-      <input type="password" formControlName="repetirContraseña" placeholder="Repetir contraseña"/>
+      <input type="password" formControlName="repetirContrasena" placeholder="Repetir contraseña"/>
     </div>
 
     <div class="grupo-campo">

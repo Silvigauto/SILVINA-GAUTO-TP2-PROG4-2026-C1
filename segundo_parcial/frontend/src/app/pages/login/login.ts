@@ -21,26 +21,26 @@ export class Login {
   ) {
     this.formularioLogin = this.constructorFormulario.group({
       usuario: ['', Validators.required],
-      contraseña: ['', [Validators.required, Validators.minLength(8)]]
+      contrasena: ['', [Validators.required, Validators.minLength(8)]]
     });
   }
 
-alEnviar() {
-  if (this.formularioLogin.valid) {
-    this.servAuth.login(this.formularioLogin.value).subscribe({
-      next: (respuesta: any) => {
-        localStorage.setItem('token', respuesta.token);
-        localStorage.setItem('usuario', JSON.stringify(respuesta.usuario));
-        this.servAuth.loginExitoso.emit();
-        this.enrutador.navigate(['/publicaciones']);
-      },
-      error: (error) => {
-        console.error(error);
-        alert('Usuario o contraseña incorrectos');
-      }
-    });
+  alEnviar() {
+    if (this.formularioLogin.valid) {
+      this.servAuth.login(this.formularioLogin.value).subscribe({
+        next: (respuesta: any) => {
+          localStorage.setItem('token', respuesta.token);
+          localStorage.setItem('usuario', JSON.stringify(respuesta.usuario));
+          this.servAuth.loginExitoso.emit();
+          this.enrutador.navigate(['/publicaciones']);
+        },
+        error: (error) => {
+          console.error(error);
+          alert('Usuario o contraseña incorrectos');
+        }
+      });
+    }
   }
-}
 
   irARegistro() {
     this.enrutador.navigate(['/registro']);

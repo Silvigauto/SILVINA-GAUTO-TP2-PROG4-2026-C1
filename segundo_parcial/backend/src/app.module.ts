@@ -6,17 +6,19 @@ import { UsuariosModule } from './usuarios/usuarios.module';
 import { PublicacionesModule } from './publicaciones/publicaciones.module';
 import { APP_PIPE } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
+import { CloudinaryModule } from './cloudinary/cloudinary.module';
 
 
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }), //variables del .env
-    MongooseModule.forRoot(process.env.MONGO_URI!),//conecta mongodb con .env
-    AuthModule,
-    UsuariosModule,
-    PublicacionesModule,
-  ],
+  ConfigModule.forRoot({ isGlobal: true }),
+  MongooseModule.forRoot(process.env.MONGO_URI!),
+  AuthModule,
+  UsuariosModule,
+  PublicacionesModule,
+  CloudinaryModule,
+],
   controllers: [],
   providers: [
     {

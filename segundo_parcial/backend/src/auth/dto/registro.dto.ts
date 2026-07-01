@@ -1,4 +1,5 @@
-import { IsString, IsEmail, IsDateString, MinLength } from 'class-validator';
+import { IsString, IsEmail, IsDateString, MinLength, IsOptional } from 'class-validator';
+import { Transform } from 'class-transformer';
 
 export class RegistroDto {
   @IsString()
@@ -15,7 +16,7 @@ export class RegistroDto {
 
   @IsString()
   @MinLength(8)
-  contraseña!: string;
+  contrasena!: string;
 
   @IsDateString()
   fechaNacimiento!: string;
