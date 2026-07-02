@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Publicaciones } from '../../services/publicaciones';
@@ -28,6 +28,7 @@ export class PublicacionesPage {
   readonly Heart = Heart;
   readonly Eye = Eye;
   readonly Trash2 = Trash2;
+  @ViewChild('inputImagen') inputImagen!: ElementRef;
 
   constructor(private servPublicaciones: Publicaciones, private enrutador: Router, private cdr: ChangeDetectorRef) {}
 
@@ -42,24 +43,20 @@ export class PublicacionesPage {
     }
   }
 
-  crearPublicacion() {
-  console.log('imagen a enviar:', this.imagenPublicacion);
+crearPublicacion() {
   if (this.nuevaPublicacion.titulo && this.nuevaPublicacion.mensaje) {
     const formData = new FormData();
     formData.append('titulo', this.nuevaPublicacion.titulo);
     formData.append('mensaje', this.nuevaPublicacion.mensaje);
     if (this.imagenPublicacion) {
       formData.append('imagen', this.imagenPublicacion);
-      console.log('imagen agregada al formData');
-    } else {
-      console.log('no hay imagen');
     }
-    console.log('formData entries:', [...formData.entries()]);
 
     this.servPublicaciones.crear(formData).subscribe({
       next: () => {
         this.nuevaPublicacion = { titulo: '', mensaje: '' };
         this.imagenPublicacion = null;
+        if (this.inputImagen) this.inputImagen.nativeElement.value = '';
         this.cargarPublicaciones();
         this.cdr.detectChanges();
       },

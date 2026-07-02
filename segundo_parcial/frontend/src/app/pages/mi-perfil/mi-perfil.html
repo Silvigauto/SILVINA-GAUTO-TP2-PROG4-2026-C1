@@ -1,10 +1,13 @@
 <div class="contenedor-perfil">
   <div class="card datos-perfil">
-    <h2 class="titulo-seccion">{{ usuario.nombre }} {{ usuario.apellido }}</h2>
-    <p><strong>Usuario:</strong> {{ usuario.username }}</p>
-    <p><strong>Correo:</strong> {{ usuario.email }}</p>
-    <p><strong>Descripción:</strong> {{ usuario.descripcion }}</p>
-  </div>
+  @if (usuario.fotoPerfil) {
+    <img [src]="usuario.fotoPerfil" alt="foto de perfil" class="foto-perfil"/>
+  }
+  <h2 class="titulo-seccion">{{ usuario.nombre }} {{ usuario.apellido }}</h2>
+  <p><strong>Usuario:</strong> {{ usuario.username }}</p>
+  <p><strong>Correo:</strong> {{ usuario.email }}</p>
+  <p><strong>Descripción:</strong> {{ usuario.descripcion }}</p>
+</div>
 
   <div class="mis-publicaciones">
     <h3 class="titulo-seccion">Mis últimas publicaciones</h3>

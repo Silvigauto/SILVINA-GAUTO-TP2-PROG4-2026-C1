@@ -3,7 +3,7 @@
     <h3 class="titulo-seccion">Nueva publicación</h3>
     <input type="text" [(ngModel)]="nuevaPublicacion.titulo" placeholder="Título"/>
     <textarea [(ngModel)]="nuevaPublicacion.mensaje" placeholder="¿Qué estás pensando?"></textarea>
-    <input type="file" accept="image/*" (change)="alSeleccionarImagen($event)"/>
+    <input type="file" accept="image/*" (change)="alSeleccionarImagen($event)" #inputImagen/>
     <button class="btn-primario" (click)="crearPublicacion()">Publicar</button>
   </div>
 
