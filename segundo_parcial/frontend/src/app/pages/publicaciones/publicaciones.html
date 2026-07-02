@@ -1,8 +1,9 @@
 <div class="contenedor-publicaciones">
-  <div class="card formulario-publicacion">
+  <div class="formulario-publicacion card">
     <h3 class="titulo-seccion">Nueva publicación</h3>
     <input type="text" [(ngModel)]="nuevaPublicacion.titulo" placeholder="Título"/>
     <textarea [(ngModel)]="nuevaPublicacion.mensaje" placeholder="¿Qué estás pensando?"></textarea>
+    <input type="file" accept="image/*" (change)="alSeleccionarImagen($event)"/>
     <button class="btn-primario" (click)="crearPublicacion()">Publicar</button>
   </div>
 
@@ -20,6 +21,9 @@
           <span class="texto-secundario">{{ publicacion.createdAt | tiempoTranscurrido }}</span>
         </div>
         <h3>{{ publicacion.titulo }}</h3>
+        @if (publicacion.imagen) {
+          <img [src]="publicacion.imagen" alt="imagen de publicacion" class="publicacion-imagen"/>
+        }
         <p>{{ publicacion.mensaje | truncar:150 }}</p>
         <div class="publicacion-acciones">
           <button class="btn-like btn-primario" animacionLike (click)="toggleLike(publicacion)">
@@ -30,7 +34,7 @@
             <lucide-icon [img]="Eye" size="16"></lucide-icon>
             Ver
           </button>
-          @if (publicacion.usuario._id === usuarioActual._id || usuarioActual.rol === 'administrador') {
+          @if (publicacion.usuario?._id?.toString() === usuarioActual._id?.toString() || usuarioActual.rol === 'administrador') {
             <button class="btn-peligro"
               confirmarAccion
               mensajeConfirmacion="¿Estás seguro que querés eliminar esta publicación?"

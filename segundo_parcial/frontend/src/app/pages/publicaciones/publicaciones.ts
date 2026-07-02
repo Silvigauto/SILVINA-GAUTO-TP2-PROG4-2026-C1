@@ -24,6 +24,7 @@ export class PublicacionesPage {
   offset = 0;
   limite = 10;
   nuevaPublicacion = { titulo: '', mensaje: '' };
+  imagenPublicacion: File | null = null;
   readonly Heart = Heart;
   readonly Eye = Eye;
   readonly Trash2 = Trash2;
@@ -34,27 +35,50 @@ export class PublicacionesPage {
     this.cargarPublicaciones();
   }
 
-  crearPublicacion() {
-    if (this.nuevaPublicacion.titulo && this.nuevaPublicacion.mensaje) {
-      this.servPublicaciones.crear(this.nuevaPublicacion).subscribe({
-        next: () => {
-          this.nuevaPublicacion = { titulo: '', mensaje: '' };
-          this.cargarPublicaciones();
-        },
-        error: (error) => console.error(error)
-      });
+  alSeleccionarImagen(evento: Event) {
+    const input = evento.target as HTMLInputElement;
+    if (input.files && input.files[0]) {
+      this.imagenPublicacion = input.files[0];
     }
   }
 
-  cargarPublicaciones() {
-    this.servPublicaciones.listar('fecha', this.limite, this.offset).subscribe({
-      next: (respuesta: any) => {
-        this.listadoPublicaciones = [...respuesta];
+  crearPublicacion() {
+  console.log('imagen a enviar:', this.imagenPublicacion);
+  if (this.nuevaPublicacion.titulo && this.nuevaPublicacion.mensaje) {
+    const formData = new FormData();
+    formData.append('titulo', this.nuevaPublicacion.titulo);
+    formData.append('mensaje', this.nuevaPublicacion.mensaje);
+    if (this.imagenPublicacion) {
+      formData.append('imagen', this.imagenPublicacion);
+      console.log('imagen agregada al formData');
+    } else {
+      console.log('no hay imagen');
+    }
+    console.log('formData entries:', [...formData.entries()]);
+
+    this.servPublicaciones.crear(formData).subscribe({
+      next: () => {
+        this.nuevaPublicacion = { titulo: '', mensaje: '' };
+        this.imagenPublicacion = null;
+        this.cargarPublicaciones();
         this.cdr.detectChanges();
       },
       error: (error) => console.error(error)
     });
   }
+}
+
+  cargarPublicaciones() {
+  this.servPublicaciones.listar('fecha', this.limite, this.offset).subscribe({
+    next: (respuesta: any) => {
+      this.listadoPublicaciones = [...respuesta];
+      console.log('usuario actual id:', this.usuarioActual._id);
+      console.log('usuario publicacion id:', respuesta[0]?.usuario?._id);
+      this.cdr.detectChanges();
+    },
+    error: (error) => console.error(error)
+  });
+}
 
   toggleLike(publicacion: any) {
     const yaLikeo = publicacion.likes.includes(this.usuarioActual._id);

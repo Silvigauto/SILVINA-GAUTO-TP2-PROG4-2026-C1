@@ -25,8 +25,11 @@ listar(orden?: string, limite?: number, offset?: number, usuarioId?: string) {
 }
 
   crear(datos: any) {
-    return this.http.post(`${this.url}/publicaciones`, datos, { headers: this.obtenerHeaders() });
-  }
+  const token = localStorage.getItem('token');
+  return this.http.post(`${this.url}/publicaciones`, datos, {
+    headers: { Authorization: `Bearer ${token}` }
+  });
+}
 
   eliminar(id: string) {
     return this.http.delete(`${this.url}/publicaciones/${id}`, { headers: this.obtenerHeaders() });

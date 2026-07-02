@@ -1,20 +1,27 @@
-import { Controller, Get, Post,Put, Delete, Body, Param, Query, UseGuards, Req } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Body, Param, Query, UseGuards, Req, UseInterceptors, UploadedFile } from '@nestjs/common';
 import { PublicacionesService } from './publicaciones.service';
 import { CrearPublicacionDto } from './dto/crear-publicacion.dto';
 import { TokenGuard } from '../guards/token.guard';
 import { CrearComentarioDto } from './dto/crear-comentario.dto';
-
+import { FileInterceptor } from '@nestjs/platform-express';
+import { verify } from 'jsonwebtoken';
 
 @Controller('publicaciones')
 export class PublicacionesController {
   constructor(private readonly publicacionesService: PublicacionesService) {}
 
-  @Post()
-  @UseGuards(TokenGuard)
-  crear(@Body() datos: CrearPublicacionDto, @Body('idDelToken') idDelToken: string) {
-    return this.publicacionesService.crear(datos, idDelToken);
-  }
-
+@Post()
+@UseInterceptors(FileInterceptor('imagen', {}))
+crear(
+  @Body() datos: any,
+  @Req() req: any,
+  @UploadedFile() imagen: Express.Multer.File
+) {
+  const token = req.headers.authorization?.replace('Bearer ', '') || '';
+  const verificado = verify(token, process.env.CLAVE_SUPERSECRETA!) as any;
+  const idDelToken = verificado._id;
+  return this.publicacionesService.crear(datos, idDelToken, imagen);
+}
   @Get()
   listar(
     @Query('orden') orden: string,
@@ -38,7 +45,6 @@ export class PublicacionesController {
   @Post(':id/like')
   @UseGuards(TokenGuard)
   darLike(@Param('id') id: string, @Req() req: any) {
-    console.log('body completo:', JSON.stringify(req.body));
     const idDelToken = req.body.idDelToken;
     return this.publicacionesService.darLike(id, idDelToken);
   }
@@ -46,20 +52,20 @@ export class PublicacionesController {
   @Delete(':id/like')
   @UseGuards(TokenGuard)
   quitarLike(@Param('id') id: string, @Req() req: any) {
-    const idDelToken = (req as any).body.idDelToken;
+    const idDelToken = req.body.idDelToken;
     return this.publicacionesService.quitarLike(id, idDelToken);
   }
 
   @Post(':id/comentarios')
-@UseGuards(TokenGuard)
-agregarComentario(
-  @Param('id') id: string,
-  @Req() req: any,
-  @Body() datos: CrearComentarioDto
-) {
-  const idDelToken = req.body.idDelToken;
-  return this.publicacionesService.agregarComentario(id, idDelToken, datos);
-}
+  @UseGuards(TokenGuard)
+  agregarComentario(
+    @Param('id') id: string,
+    @Req() req: any,
+    @Body() datos: CrearComentarioDto
+  ) {
+    const idDelToken = req.body.idDelToken;
+    return this.publicacionesService.agregarComentario(id, idDelToken, datos);
+  }
 
   @Put(':id/comentarios/:comentarioId')
   @UseGuards(TokenGuard)
@@ -83,7 +89,7 @@ agregarComentario(
   }
 
   @Get(':id')
-obtenerUna(@Param('id') id: string) {
-  return this.publicacionesService.obtenerUna(id);
-}
+  obtenerUna(@Param('id') id: string) {
+    return this.publicacionesService.obtenerUna(id);
+  }
 }

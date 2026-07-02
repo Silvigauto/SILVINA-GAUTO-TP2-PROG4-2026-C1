@@ -13,13 +13,34 @@ export class PublicacionesService {
     @InjectModel(Comentario.name) private comentarioModel: Model<Comentario>,
   ) {}
 
-  async crear(datos: CrearPublicacionDto, usuarioId: string) {
-    const publicacion = await this.publicacionModel.create({
-      ...datos,
-      usuario: usuarioId,
+ async crear(datos: any, usuarioId: string, imagen?: Express.Multer.File) {
+  console.log('datos:', datos);
+  console.log('imagen:', imagen?.originalname);
+  let urlImagen = '';
+
+  if (imagen) {
+    const { v2: cloudinary } = require('cloudinary');
+    const resultado = await new Promise((resolve, reject) => {
+      const stream = cloudinary.uploader.upload_stream(
+        { folder: 'publicaciones', public_id: `IMG_${Date.now()}` },
+        (error: any, result: any) => {
+          if (error) reject(error);
+          else resolve(result);
+        }
+      );
+      stream.end(imagen.buffer);
     });
-    return publicacion;
+    urlImagen = (resultado as any).secure_url;
   }
+
+  const publicacion = await this.publicacionModel.create({
+    titulo: datos.titulo,
+    mensaje: datos.mensaje,
+    imagen: urlImagen,
+    usuario: usuarioId,
+  });
+  return publicacion;
+}
 
   async listar(orden: string = 'fecha', limite: number = 10, offset: number = 0, usuarioId?: string) {
     const filtro: any = { activo: true };
@@ -30,7 +51,7 @@ export class PublicacionesService {
       .sort({ createdAt: -1 })
       .skip(Number(offset) || 0)
       .limit(Number(limite) || 10)
-      .populate('usuario', 'nombre apellido username fotoPerfil');
+      .populate('usuario', '_id nombre apellido username fotoPerfil');
 
     return publicaciones;
   }

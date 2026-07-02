@@ -6,13 +6,15 @@ import { Publicacion, PublicacionSchema } from './entities/publicacion.schema';
 import { Comentario, ComentarioSchema } from './entities/comentario.schema';
 import { EstadisticasController } from './estadisticas.controller';
 import { EstadisticasService } from './estadisticas.service';
+import { CloudinaryModule } from '../cloudinary/cloudinary.module';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: Publicacion.name, schema: PublicacionSchema },
       { name: Comentario.name, schema: ComentarioSchema }
-    ])
+    ]),
+    CloudinaryModule,
   ],
   controllers: [PublicacionesController, EstadisticasController],
   providers: [PublicacionesService, EstadisticasService],
