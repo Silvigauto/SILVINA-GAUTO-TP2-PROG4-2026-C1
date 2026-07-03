@@ -41,4 +41,11 @@ export class UsuariosController {
     }
     return this.usuariosService.habilitar(id);
   }
+
+  @Get(':id')
+@UseGuards(TokenGuard)
+obtenerUno(@Param('id') id: string, @Req() req: any) {
+  const visitanteId = req.body.idDelToken;
+  return this.usuariosService.obtenerUno(id, visitanteId);
+}
 }

@@ -26,9 +26,21 @@ export class MiPerfil implements OnInit {
     this.servPublicaciones.listar('fecha', 3, 0, this.usuario._id).subscribe({
       next: (respuesta: any) => {
         this.misPublicaciones = [...respuesta];
-        this.cdr.detectChanges();
+        this.cargarComentarios();
       },
       error: (error) => console.error(error)
+    });
+  }
+
+  cargarComentarios() {
+    this.misPublicaciones.forEach((publicacion, index) => {
+      this.servPublicaciones.listarComentarios(publicacion._id, 5, 0).subscribe({
+        next: (comentarios: any) => {
+          this.misPublicaciones[index].comentarios = comentarios;
+          this.cdr.detectChanges();
+        },
+        error: (error) => console.error(error)
+      });
     });
   }
 }

@@ -9,6 +9,7 @@ import { authGuard } from '../app/guards/auth.guard';
 import { DashboardUsuarios } from './pages/dashboard-usuarios/dashboard-usuarios';
 import { DashboardEstadisticas } from './pages/dashboard-estadisticas/dashboard-estadisticas';
 import { adminGuard } from './guards/admin.guard';
+import { PerfilUsuario } from './pages/perfil-usuario/perfil-usuario';
 
 
 export const routes: Routes = [
@@ -23,4 +24,5 @@ export const routes: Routes = [
   { path: 'dashboard-estadisticas', component: DashboardEstadisticas, canActivate: [authGuard] },
   { path: 'dashboard-usuarios', component: DashboardUsuarios, canActivate: [authGuard, adminGuard] },
 { path: 'dashboard-estadisticas', component: DashboardEstadisticas, canActivate: [authGuard, adminGuard] },
+{ path: 'perfil/:id', component: PerfilUsuario, canActivate: [authGuard] },
 ];

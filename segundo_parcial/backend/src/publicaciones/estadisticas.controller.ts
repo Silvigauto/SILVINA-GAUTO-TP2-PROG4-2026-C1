@@ -9,40 +9,43 @@ export class EstadisticasController {
 
   @Get('publicaciones-por-usuario')
   @UseGuards(TokenGuard)
-  publicacionesPorUsuario(
-    @Query('desde') desde: string,
-    @Query('hasta') hasta: string,
-    @Req() req: any
-  ) {
-    if (req.body.rolDelToken !== 'administrador') {
-      throw new UnauthorizedException('No tenés permiso');
-    }
+  publicacionesPorUsuario(@Query('desde') desde: string, @Query('hasta') hasta: string, @Req() req: any) {
+    if (req.body.rolDelToken !== 'administrador') throw new UnauthorizedException('No tenés permiso');
     return this.estadisticasService.publicacionesPorUsuario(desde, hasta);
   }
 
   @Get('comentarios-por-tiempo')
   @UseGuards(TokenGuard)
-  comentariosPorTiempo(
-    @Query('desde') desde: string,
-    @Query('hasta') hasta: string,
-    @Req() req: any
-  ) {
-    if (req.body.rolDelToken !== 'administrador') {
-      throw new UnauthorizedException('No tenés permiso');
-    }
+  comentariosPorTiempo(@Query('desde') desde: string, @Query('hasta') hasta: string, @Req() req: any) {
+    if (req.body.rolDelToken !== 'administrador') throw new UnauthorizedException('No tenés permiso');
     return this.estadisticasService.comentariosPorTiempo(desde, hasta);
   }
 
   @Get('comentarios-por-publicacion')
   @UseGuards(TokenGuard)
-  comentariosPorPublicacion(
-    @Query('desde') desde: string,
-    @Query('hasta') hasta: string,
-    @Req() req: any
-  ) {
-    if (req.body.rolDelToken !== 'administrador') {
-      throw new UnauthorizedException('No tenés permiso');
-    }
+  comentariosPorPublicacion(@Query('desde') desde: string, @Query('hasta') hasta: string, @Req() req: any) {
+    if (req.body.rolDelToken !== 'administrador') throw new UnauthorizedException('No tenés permiso');
     return this.estadisticasService.comentariosPorPublicacion(desde, hasta);
+  }
+
+  @Get('logins-por-usuario')
+  @UseGuards(TokenGuard)
+  loginsPorUsuario(@Query('desde') desde: string, @Query('hasta') hasta: string, @Req() req: any) {
+    if (req.body.rolDelToken !== 'administrador') throw new UnauthorizedException('No tenés permiso');
+    return this.estadisticasService.loginsPorUsuario(desde, hasta);
+  }
+
+  @Get('visitas-por-perfil')
+  @UseGuards(TokenGuard)
+  visitasPorPerfil(@Query('desde') desde: string, @Query('hasta') hasta: string, @Req() req: any) {
+    if (req.body.rolDelToken !== 'administrador') throw new UnauthorizedException('No tenés permiso');
+    return this.estadisticasService.visitasPorPerfil(desde, hasta);
+  }
+
+  @Get('likes-por-dia')
+  @UseGuards(TokenGuard)
+  likesPorDia(@Query('desde') desde: string, @Query('hasta') hasta: string, @Req() req: any) {
+    if (req.body.rolDelToken !== 'administrador') throw new UnauthorizedException('No tenés permiso');
+    return this.estadisticasService.likesPorDia(desde, hasta);
   }
 }

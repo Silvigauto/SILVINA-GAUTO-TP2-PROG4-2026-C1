@@ -42,19 +42,28 @@ export class PublicacionesService {
   return publicacion;
 }
 
-  async listar(orden: string = 'fecha', limite: number = 10, offset: number = 0, usuarioId?: string) {
-    const filtro: any = { activo: true };
-    if (usuarioId) filtro.usuario = usuarioId;
+async listar(orden: string = 'fecha', limite: number = 10, offset: number = 0, usuarioId?: string) {
+  const filtro: any = { activo: true };
+  if (usuarioId) filtro.usuario = usuarioId;
 
-    const publicaciones = await this.publicacionModel
-      .find(filtro)
-      .sort({ createdAt: -1 })
-      .skip(Number(offset) || 0)
-      .limit(Number(limite) || 10)
-      .populate('usuario', '_id nombre apellido username fotoPerfil');
+  const ordenMongo: any = orden === 'likes' 
+  ? { likes: -1 } 
+  : { createdAt: -1 };
 
-    return publicaciones;
+  const publicaciones = await this.publicacionModel
+    .find(filtro)
+    .sort(ordenMongo)
+    .skip(Number(offset) || 0)
+    .limit(Number(limite) || 10)
+    .populate('usuario', '_id nombre apellido username fotoPerfil')
+    .lean();
+
+  if (orden === 'likes') {
+    publicaciones.sort((a: any, b: any) => b.likes.length - a.likes.length);
   }
+
+  return publicaciones;
+}
 
   async eliminar(id: string, usuarioId: string, rol: string) {
     const publicacion = await this.publicacionModel.findById(id);

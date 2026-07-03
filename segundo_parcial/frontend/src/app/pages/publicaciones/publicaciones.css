@@ -76,3 +76,26 @@
   padding: 6px 14px;
   font-size: 13px;
 }
+
+.ordenamiento {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.cargando-mas {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 16px;
+}
+
+.spinner-mini {
+  width: 20px;
+  height: 20px;
+  border: 3px solid #ddd;
+  border-top: 3px solid #FFC300;
+  border-radius: 50%;
+  animation: girar 0.8s linear infinite;
+}

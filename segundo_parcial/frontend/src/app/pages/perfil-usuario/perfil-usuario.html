@@ -1,0 +1,32 @@
+<div class="contenedor-perfil">
+  @if (usuario) {
+    <div class="card datos-perfil">
+      @if (usuario.fotoPerfil) {
+        <img [src]="usuario.fotoPerfil" alt="foto de perfil" class="foto-perfil"/>
+      }
+      <h2 class="titulo-seccion">{{ usuario.nombre }} {{ usuario.apellido }}</h2>
+      <p><strong>Usuario:</strong> {{ usuario.username }}</p>
+      <p><strong>Correo:</strong> {{ usuario.email }}</p>
+      <p><strong>Descripción:</strong> {{ usuario.descripcion }}</p>
+    </div>
+
+    <div class="mis-publicaciones">
+      <h3 class="titulo-seccion">Últimas publicaciones</h3>
+
+      @if (publicaciones.length === 0) {
+        <p class="texto-secundario">No tiene publicaciones todavía</p>
+      }
+
+      @for (publicacion of publicaciones; track publicacion._id) {
+        <div class="card publicacion">
+          <h4>{{ publicacion.titulo }}</h4>
+          <p>{{ publicacion.mensaje }}</p>
+          <p class="texto-secundario">{{ publicacion.createdAt | date:'dd/MM/yyyy' }}</p>
+          @if (usuarioActual.rol === 'administrador') {
+            <button class="btn-peligro" (click)="eliminar(publicacion._id)">Eliminar</button>
+          }
+        </div>
+      }
+    </div>
+  }
+</div>

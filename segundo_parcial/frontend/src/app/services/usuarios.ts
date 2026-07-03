@@ -30,4 +30,7 @@ export class Usuarios {
   habilitar(id: string) {
     return this.http.post(`${this.url}/usuarios/${id}/habilitar`, {}, { headers: this.obtenerHeaders() });
   }
+  obtenerUno(id: string) {
+  return this.http.get(`${this.url}/usuarios/${id}`, { headers: this.obtenerHeaders() });
+}
 }

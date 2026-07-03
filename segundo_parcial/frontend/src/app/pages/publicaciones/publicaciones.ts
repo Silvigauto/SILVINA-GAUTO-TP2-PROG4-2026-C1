@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Publicaciones } from '../../services/publicaciones';
@@ -18,13 +18,15 @@ import { LucideAngularModule, Heart, Eye, Trash2 } from 'lucide-angular';
   templateUrl: './publicaciones.html',
   styleUrl: './publicaciones.css'
 })
-export class PublicacionesPage {
+export class PublicacionesPage implements OnInit, OnDestroy {
   listadoPublicaciones: any[] = [];
   usuarioActual: any = JSON.parse(localStorage.getItem('usuario') || '{}');
   offset = 0;
   limite = 10;
   nuevaPublicacion = { titulo: '', mensaje: '' };
   imagenPublicacion: File | null = null;
+  ordenActual: string = 'fecha';
+  cargandoMas = false;
   readonly Heart = Heart;
   readonly Eye = Eye;
   readonly Trash2 = Trash2;
@@ -34,7 +36,46 @@ export class PublicacionesPage {
 
   ngOnInit() {
     this.cargarPublicaciones();
+    window.addEventListener('scroll', this.alScrollear.bind(this));
   }
+
+  ngOnDestroy() {
+    window.removeEventListener('scroll', this.alScrollear.bind(this));
+  }
+
+  alScrollear() {
+    const alturaTotal = document.documentElement.scrollHeight;
+    const alturaVentana = window.innerHeight;
+    const scrollActual = window.scrollY;
+
+    if (scrollActual + alturaVentana >= alturaTotal - 100) {
+      this.cargarMasPublicaciones();
+    }
+  }
+
+  cargarMasPublicaciones() {
+  if (this.cargandoMas) return;
+  this.cargandoMas = true;
+  this.offset += this.limite;
+
+  this.servPublicaciones.listar(this.ordenActual, this.limite, this.offset).subscribe({
+    next: (respuesta: any) => {
+      if (respuesta.length > 0) {
+        this.listadoPublicaciones = [...this.listadoPublicaciones, ...respuesta];
+      } else {
+        this.offset -= this.limite;
+        window.removeEventListener('scroll', this.alScrollear.bind(this));
+      }
+      this.cargandoMas = false;
+      this.cdr.detectChanges();
+    },
+    error: (error) => {
+      console.error(error);
+      this.cargandoMas = false;
+      this.cdr.detectChanges();
+    }
+  });
+}
 
   alSeleccionarImagen(evento: Event) {
     const input = evento.target as HTMLInputElement;
@@ -43,39 +84,39 @@ export class PublicacionesPage {
     }
   }
 
-crearPublicacion() {
-  if (this.nuevaPublicacion.titulo && this.nuevaPublicacion.mensaje) {
-    const formData = new FormData();
-    formData.append('titulo', this.nuevaPublicacion.titulo);
-    formData.append('mensaje', this.nuevaPublicacion.mensaje);
-    if (this.imagenPublicacion) {
-      formData.append('imagen', this.imagenPublicacion);
-    }
+  crearPublicacion() {
+    if (this.nuevaPublicacion.titulo && this.nuevaPublicacion.mensaje) {
+      const formData = new FormData();
+      formData.append('titulo', this.nuevaPublicacion.titulo);
+      formData.append('mensaje', this.nuevaPublicacion.mensaje);
+      if (this.imagenPublicacion) {
+        formData.append('imagen', this.imagenPublicacion);
+      }
 
-    this.servPublicaciones.crear(formData).subscribe({
-      next: () => {
-        this.nuevaPublicacion = { titulo: '', mensaje: '' };
-        this.imagenPublicacion = null;
-        if (this.inputImagen) this.inputImagen.nativeElement.value = '';
-        this.cargarPublicaciones();
+      this.servPublicaciones.crear(formData).subscribe({
+        next: () => {
+          this.nuevaPublicacion = { titulo: '', mensaje: '' };
+          this.imagenPublicacion = null;
+          if (this.inputImagen) this.inputImagen.nativeElement.value = '';
+          this.offset = 0;
+          this.cargarPublicaciones();
+          this.cdr.detectChanges();
+        },
+        error: (error) => console.error(error)
+      });
+    }
+  }
+
+  cargarPublicaciones() {
+    this.offset = 0;
+    this.servPublicaciones.listar(this.ordenActual, this.limite, this.offset).subscribe({
+      next: (respuesta: any) => {
+        this.listadoPublicaciones = [...respuesta];
         this.cdr.detectChanges();
       },
       error: (error) => console.error(error)
     });
   }
-}
-
-  cargarPublicaciones() {
-  this.servPublicaciones.listar('fecha', this.limite, this.offset).subscribe({
-    next: (respuesta: any) => {
-      this.listadoPublicaciones = [...respuesta];
-      console.log('usuario actual id:', this.usuarioActual._id);
-      console.log('usuario publicacion id:', respuesta[0]?.usuario?._id);
-      this.cdr.detectChanges();
-    },
-    error: (error) => console.error(error)
-  });
-}
 
   toggleLike(publicacion: any) {
     const yaLikeo = publicacion.likes.includes(this.usuarioActual._id);
@@ -102,4 +143,13 @@ crearPublicacion() {
   verPublicacion(id: string) {
     this.enrutador.navigate(['/publicacion', id]);
   }
+
+  cambiarOrden(orden: string) {
+    this.ordenActual = orden;
+    this.cargarPublicaciones();
+  }
+
+  verPerfil(id: string) {
+  this.enrutador.navigate(['/perfil', id]);
+}
 }

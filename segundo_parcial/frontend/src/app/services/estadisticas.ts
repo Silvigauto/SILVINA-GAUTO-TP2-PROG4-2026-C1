@@ -35,4 +35,25 @@ export class Estadisticas {
       { headers: this.obtenerHeaders() }
     );
   }
+  
+  loginsPorUsuario(desde: string, hasta: string) {
+    return this.http.get(
+      `${this.url}/estadisticas/logins-por-usuario?desde=${desde}&hasta=${hasta}`,
+      { headers: this.obtenerHeaders() }
+    );
+  }
+
+  visitasPorPerfil(desde: string, hasta: string) {
+    return this.http.get(
+      `${this.url}/estadisticas/visitas-por-perfil?desde=${desde}&hasta=${hasta}`,
+      { headers: this.obtenerHeaders() }
+    );
+  }
+
+  likesPorDia(desde: string, hasta: string) {
+    return this.http.get(
+      `${this.url}/estadisticas/likes-por-dia?desde=${desde}&hasta=${hasta}`,
+      { headers: this.obtenerHeaders() }
+    );
+  }
 }

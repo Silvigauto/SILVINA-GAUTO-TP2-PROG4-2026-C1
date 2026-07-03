@@ -6,13 +6,15 @@ import { LoginDto } from './dto/login.dto';
 import * as bcrypt from 'bcrypt';
 import { sign, verify } from 'jsonwebtoken';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
+import { Login } from './entities/login.schema';
 
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectModel(Usuario.name) private usuarioModel: Model<Usuario>,
-    private readonly cloudinaryService: CloudinaryService,
-  ) {}
+  @InjectModel(Usuario.name) private usuarioModel: Model<Usuario>,
+  @InjectModel(Login.name) private loginModel: Model<Login>,
+  private readonly cloudinaryService: CloudinaryService,
+) {}
 
   async registro(datos: any, foto?: Express.Multer.File) {
     console.log('datos recibidos:', datos);
@@ -70,36 +72,39 @@ export class AuthService {
   }
 
   async login(datos: LoginDto) {
-    try {
-      const usuario = await this.usuarioModel.findOne({
-        $or: [{ email: datos.usuario }, { username: datos.usuario }],
-      });
+  try {
+    const usuario = await this.usuarioModel.findOne({
+      $or: [{ email: datos.usuario }, { username: datos.usuario }],
+    });
 
-      if (!usuario) throw new Error();
+    if (!usuario) throw new Error();
 
-      const contrasenaValida = await bcrypt.compare(datos.contrasena, usuario.contrasena);
-      if (!contrasenaValida) throw new Error();
+    const contrasenaValida = await bcrypt.compare(datos.contrasena, usuario.contrasena);
+    if (!contrasenaValida) throw new Error();
 
-      if (!usuario.activo) {
-        throw new UnauthorizedException('Tu cuenta está deshabilitada');
-      }
-
-      const payload = {
-        email: usuario.email,
-        _id: usuario._id,
-        rol: usuario.rol,
-      };
-
-      const jwt = sign(payload, process.env.CLAVE_SUPERSECRETA!, {
-        algorithm: 'HS256',
-        expiresIn: '15m',
-      });
-
-      return { token: jwt, usuario };
-    } catch {
-      throw new UnauthorizedException('Usuario o contraseña incorrectos');
+    if (!usuario.activo) {
+      throw new UnauthorizedException('Tu cuenta está deshabilitada');
     }
+
+    const payload = {
+      email: usuario.email,
+      _id: usuario._id,
+      rol: usuario.rol,
+    };
+
+    const jwt = sign(payload, process.env.CLAVE_SUPERSECRETA!, {
+      algorithm: 'HS256',
+      expiresIn: '15m',
+    });
+
+    await this.loginModel.create({ usuario: usuario._id });
+
+    return { token: jwt, usuario };
+  } catch (error) {
+    if (error instanceof UnauthorizedException) throw error;
+    throw new UnauthorizedException('Usuario o contraseña incorrectos');
   }
+}
 
   async autorizar(token: string) {
     try {

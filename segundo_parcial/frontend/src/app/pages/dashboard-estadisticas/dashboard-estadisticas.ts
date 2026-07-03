@@ -20,9 +20,15 @@ export class DashboardEstadisticas implements OnInit {
   datosPublicaciones: any[] = [];
   datosComentariosTiempo: any[] = [];
   datosComentariosPublicacion: any[] = [];
+  datosLogins: any[] = [];
+  datosVisitas: any[] = [];
+  datosLikes: any[] = [];
   graficoPublicaciones: any = null;
   graficoComentariosTiempo: any = null;
   graficoComentariosPublicacion: any = null;
+  graficoLogins: any = null;
+  graficoVisitas: any = null;
+  graficoLikes: any = null;
 
   constructor(
     private servEstadisticas: Estadisticas,
@@ -35,35 +41,41 @@ export class DashboardEstadisticas implements OnInit {
       this.enrutador.navigate(['/publicaciones']);
     }
     const hoy = new Date();
-    const hace7dias = new Date();
-    hace7dias.setDate(hoy.getDate() - 7);
-    this.hasta = hoy.toISOString().split('T')[0];
-    this.desde = hace7dias.toISOString().split('T')[0];
+const hace8dias = new Date();
+hace8dias.setDate(hoy.getDate() - 8);
+this.hasta = hoy.toISOString().split('T')[0];
+this.desde = hace8dias.toISOString().split('T')[0];
     this.cargarEstadisticas();
   }
 
   cargarEstadisticas() {
     this.servEstadisticas.publicacionesPorUsuario(this.desde, this.hasta).subscribe({
-      next: (respuesta: any) => {
-        this.datosPublicaciones = respuesta;
-        this.renderizarGraficoPublicaciones();
-      },
+      next: (respuesta: any) => { this.datosPublicaciones = respuesta; this.renderizarGraficoPublicaciones(); },
       error: (error) => console.error(error)
     });
 
     this.servEstadisticas.comentariosPorTiempo(this.desde, this.hasta).subscribe({
-      next: (respuesta: any) => {
-        this.datosComentariosTiempo = respuesta;
-        this.renderizarGraficoComentariosTiempo();
-      },
+      next: (respuesta: any) => { this.datosComentariosTiempo = respuesta; this.renderizarGraficoComentariosTiempo(); },
       error: (error) => console.error(error)
     });
 
     this.servEstadisticas.comentariosPorPublicacion(this.desde, this.hasta).subscribe({
-      next: (respuesta: any) => {
-        this.datosComentariosPublicacion = respuesta;
-        this.renderizarGraficoComentariosPublicacion();
-      },
+      next: (respuesta: any) => { this.datosComentariosPublicacion = respuesta; this.renderizarGraficoComentariosPublicacion(); },
+      error: (error) => console.error(error)
+    });
+
+    this.servEstadisticas.loginsPorUsuario(this.desde, this.hasta).subscribe({
+      next: (respuesta: any) => { this.datosLogins = respuesta; this.renderizarGraficoLogins(); },
+      error: (error) => console.error(error)
+    });
+
+    this.servEstadisticas.visitasPorPerfil(this.desde, this.hasta).subscribe({
+      next: (respuesta: any) => { this.datosVisitas = respuesta; this.renderizarGraficoVisitas(); },
+      error: (error) => console.error(error)
+    });
+
+    this.servEstadisticas.likesPorDia(this.desde, this.hasta).subscribe({
+      next: (respuesta: any) => { this.datosLikes = respuesta; this.renderizarGraficoLikes(); },
       error: (error) => console.error(error)
     });
   }
@@ -76,7 +88,7 @@ export class DashboardEstadisticas implements OnInit {
       type: 'bar',
       data: {
         labels: this.datosPublicaciones.map(d => `${d.nombre} ${d.apellido}`),
-        datasets: [{ label: 'Publicaciones', data: this.datosPublicaciones.map(d => d.total), backgroundColor: '#444' }]
+        datasets: [{ label: 'Publicaciones', data: this.datosPublicaciones.map(d => d.total), backgroundColor: '#FFC300' }]
       }
     });
   }
@@ -102,7 +114,46 @@ export class DashboardEstadisticas implements OnInit {
       type: 'pie',
       data: {
         labels: this.datosComentariosPublicacion.map(d => d.titulo),
-        datasets: [{ data: this.datosComentariosPublicacion.map(d => d.total), backgroundColor: ['#222', '#555', '#888', '#aaa', '#ccc'] }]
+        datasets: [{ data: this.datosComentariosPublicacion.map(d => d.total), backgroundColor: ['#FFC300', '#555', '#888', '#aaa', '#ccc'] }]
+      }
+    });
+  }
+
+  renderizarGraficoLogins() {
+    if (this.graficoLogins) this.graficoLogins.destroy();
+    const canvas = document.getElementById('graficoLogins') as HTMLCanvasElement;
+    if (!canvas) return;
+    this.graficoLogins = new Chart(canvas, {
+      type: 'bar',
+      data: {
+        labels: this.datosLogins.map(d => `${d.nombre} ${d.apellido}`),
+        datasets: [{ label: 'Ingresos', data: this.datosLogins.map(d => d.total), backgroundColor: '#444' }]
+      }
+    });
+  }
+
+  renderizarGraficoVisitas() {
+    if (this.graficoVisitas) this.graficoVisitas.destroy();
+    const canvas = document.getElementById('graficoVisitas') as HTMLCanvasElement;
+    if (!canvas) return;
+    this.graficoVisitas = new Chart(canvas, {
+      type: 'pie',
+      data: {
+        labels: this.datosVisitas.map(d => `${d.nombre} ${d.apellido}`),
+        datasets: [{ data: this.datosVisitas.map(d => d.total), backgroundColor: ['#FFC300', '#444', '#888', '#aaa', '#ccc'] }]
+      }
+    });
+  }
+
+  renderizarGraficoLikes() {
+    if (this.graficoLikes) this.graficoLikes.destroy();
+    const canvas = document.getElementById('graficoLikes') as HTMLCanvasElement;
+    if (!canvas) return;
+    this.graficoLikes = new Chart(canvas, {
+      type: 'line',
+      data: {
+        labels: this.datosLikes.map(d => d._id),
+        datasets: [{ label: 'Likes por día', data: this.datosLikes.map(d => d.total), borderColor: '#FFC300', fill: false }]
       }
     });
   }

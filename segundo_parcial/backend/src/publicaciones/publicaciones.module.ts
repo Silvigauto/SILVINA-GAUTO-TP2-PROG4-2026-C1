@@ -7,12 +7,16 @@ import { Comentario, ComentarioSchema } from './entities/comentario.schema';
 import { EstadisticasController } from './estadisticas.controller';
 import { EstadisticasService } from './estadisticas.service';
 import { CloudinaryModule } from '../cloudinary/cloudinary.module';
+import { Login, LoginSchema } from '../auth/entities/login.schema';
+import { Visita, VisitaSchema } from '../auth/entities/visita.schema';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       { name: Publicacion.name, schema: PublicacionSchema },
-      { name: Comentario.name, schema: ComentarioSchema }
+      { name: Comentario.name, schema: ComentarioSchema },
+      { name: Login.name, schema: LoginSchema },
+      { name: Visita.name, schema: VisitaSchema },
     ]),
     CloudinaryModule,
   ],
