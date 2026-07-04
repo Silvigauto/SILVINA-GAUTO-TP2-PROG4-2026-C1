@@ -3,11 +3,12 @@ import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Publicaciones } from '../../services/publicaciones';
+import { ResaltarEditadoDirective } from '../../directives/resaltar-editado';
 
 @Component({
   selector: 'app-publicacion',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ResaltarEditadoDirective],
   templateUrl: './publicacion.html',
   styleUrl: './publicacion.css'
 })
@@ -62,20 +63,20 @@ export class Publicacion implements OnInit {
   }
 
   agregarComentario() {
-  if (this.nuevoComentario.trim()) {
-    this.servPublicaciones.agregarComentario(this.publicacionId, this.nuevoComentario).subscribe({
-      next: () => {
-        this.nuevoComentario = '';
-        this.comentarios = [];
-        this.offset = 0;
-        this.hayMas = true;
-        this.cargarComentarios();
-        this.cdr.detectChanges();
-      },
-      error: (error) => console.error(error)
-    });
+    if (this.nuevoComentario.trim()) {
+      this.servPublicaciones.agregarComentario(this.publicacionId, this.nuevoComentario).subscribe({
+        next: () => {
+          this.nuevoComentario = '';
+          this.comentarios = [];
+          this.offset = 0;
+          this.hayMas = true;
+          this.cargarComentarios();
+          this.cdr.detectChanges();
+        },
+        error: (error) => console.error(error)
+      });
+    }
   }
-}
 
   iniciarEdicion(comentario: any) {
     this.comentarioEditandoId = comentario._id;
@@ -99,6 +100,4 @@ export class Publicacion implements OnInit {
     this.comentarioEditandoId = null;
     this.mensajeEditando = '';
   }
-
-  
 }

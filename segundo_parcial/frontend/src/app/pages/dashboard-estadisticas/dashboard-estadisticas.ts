@@ -48,37 +48,47 @@ this.desde = hace8dias.toISOString().split('T')[0];
     this.cargarEstadisticas();
   }
 
-  cargarEstadisticas() {
-    this.servEstadisticas.publicacionesPorUsuario(this.desde, this.hasta).subscribe({
-      next: (respuesta: any) => { this.datosPublicaciones = respuesta; this.renderizarGraficoPublicaciones(); },
-      error: (error) => console.error(error)
-    });
+ ajustarFechas() {
+  const desde = this.desde + 'T00:00:00.000Z';
+  const hasta = this.hasta + 'T23:59:59.999Z';
+  return { desde, hasta };
+}
 
-    this.servEstadisticas.comentariosPorTiempo(this.desde, this.hasta).subscribe({
-      next: (respuesta: any) => { this.datosComentariosTiempo = respuesta; this.renderizarGraficoComentariosTiempo(); },
-      error: (error) => console.error(error)
-    });
+cargarEstadisticas() {
+  
+  const { desde, hasta } = this.ajustarFechas();
+  console.log('desde:', desde);
+  console.log('hasta:', hasta);
+  this.servEstadisticas.publicacionesPorUsuario(desde, hasta).subscribe({
+    next: (respuesta: any) => { this.datosPublicaciones = respuesta; this.renderizarGraficoPublicaciones(); },
+    error: (error) => console.error(error)
+  });
 
-    this.servEstadisticas.comentariosPorPublicacion(this.desde, this.hasta).subscribe({
-      next: (respuesta: any) => { this.datosComentariosPublicacion = respuesta; this.renderizarGraficoComentariosPublicacion(); },
-      error: (error) => console.error(error)
-    });
+  this.servEstadisticas.comentariosPorTiempo(desde, hasta).subscribe({
+    next: (respuesta: any) => { this.datosComentariosTiempo = respuesta; this.renderizarGraficoComentariosTiempo(); },
+    error: (error) => console.error(error)
+  });
 
-    this.servEstadisticas.loginsPorUsuario(this.desde, this.hasta).subscribe({
-      next: (respuesta: any) => { this.datosLogins = respuesta; this.renderizarGraficoLogins(); },
-      error: (error) => console.error(error)
-    });
+  this.servEstadisticas.comentariosPorPublicacion(desde, hasta).subscribe({
+    next: (respuesta: any) => { this.datosComentariosPublicacion = respuesta; this.renderizarGraficoComentariosPublicacion(); },
+    error: (error) => console.error(error)
+  });
 
-    this.servEstadisticas.visitasPorPerfil(this.desde, this.hasta).subscribe({
-      next: (respuesta: any) => { this.datosVisitas = respuesta; this.renderizarGraficoVisitas(); },
-      error: (error) => console.error(error)
-    });
+  this.servEstadisticas.loginsPorUsuario(desde, hasta).subscribe({
+    next: (respuesta: any) => { this.datosLogins = respuesta; this.renderizarGraficoLogins(); },
+    error: (error) => console.error(error)
+  });
 
-    this.servEstadisticas.likesPorDia(this.desde, this.hasta).subscribe({
-      next: (respuesta: any) => { this.datosLikes = respuesta; this.renderizarGraficoLikes(); },
-      error: (error) => console.error(error)
-    });
-  }
+  this.servEstadisticas.visitasPorPerfil(desde, hasta).subscribe({
+    next: (respuesta: any) => { this.datosVisitas = respuesta; this.renderizarGraficoVisitas(); },
+    error: (error) => console.error(error)
+  });
+
+  this.servEstadisticas.likesPorDia(desde, hasta).subscribe({
+    next: (respuesta: any) => { this.datosLikes = respuesta; this.renderizarGraficoLikes(); },
+    error: (error) => console.error(error)
+  });
+}
 
   renderizarGraficoPublicaciones() {
     if (this.graficoPublicaciones) this.graficoPublicaciones.destroy();

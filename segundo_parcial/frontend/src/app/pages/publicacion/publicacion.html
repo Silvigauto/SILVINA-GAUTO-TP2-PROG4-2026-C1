@@ -19,7 +19,7 @@
     </div>
 
     @for (comentario of comentarios; track comentario._id) {
-      <div class="card comentario">
+      <div class="card comentario" [resaltarEditado]="comentario.modificado">
         <strong>{{ comentario.usuario.nombre }} {{ comentario.usuario.apellido }}</strong>
 
         @if (comentarioEditandoId === comentario._id) {

@@ -13,9 +13,18 @@
 }
 
 .navbar-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   cursor: pointer;
 }
 
+.navbar-logo-texto {
+  font-family: 'Raleway', sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  color: #1a1a1a;
+}
 .navbar-logo img {
   height: 70px;
   width: 70px;

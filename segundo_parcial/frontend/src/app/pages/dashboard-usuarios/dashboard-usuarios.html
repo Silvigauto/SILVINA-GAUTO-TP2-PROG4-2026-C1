@@ -13,10 +13,19 @@
       <input type="password" [(ngModel)]="nuevoUsuario.contrasena" placeholder="Contraseña"/>
       <input type="date" [(ngModel)]="nuevoUsuario.fechaNacimiento"/>
       <textarea [(ngModel)]="nuevoUsuario.descripcion" placeholder="Descripción"></textarea>
-      <select [(ngModel)]="nuevoUsuario.rol">
-        <option value="usuario">Usuario</option>
-        <option value="administrador">Administrador</option>
-      </select>
+      <div class="grupo-campo">
+  <label>Rol</label>
+  <div class="radio-grupo">
+    <label>
+      <input type="radio" [(ngModel)]="nuevoUsuario.rol" value="usuario"/>
+      Usuario
+    </label>
+    <label>
+      <input type="radio" [(ngModel)]="nuevoUsuario.rol" value="administrador"/>
+      Administrador
+    </label>
+  </div>
+</div>
       <button class="btn-primario" (click)="crearUsuario()">Crear</button>
     </div>
   }
