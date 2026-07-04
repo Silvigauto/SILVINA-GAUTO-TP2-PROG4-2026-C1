@@ -66,6 +66,10 @@
 
     <button class="btn-primario" type="submit" [disabled]="formularioRegistro.invalid">Registrarse</button>
 
+    @if (mensajeError) {
+      <div class="mensaje-error">{{ mensajeError }}</div>
+    }
+
   </form>
 
   <p>¿Ya tenés cuenta? <a (click)="irALogin()">Iniciá sesión</a></p>

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Auth } from '../../services/auth';
@@ -14,11 +14,13 @@ import { CommonModule } from '@angular/common';
 export class Registro {
   formularioRegistro: FormGroup;
   imagenPerfil: File | null = null;
+  mensajeError: string = '';
 
   constructor(
     private constructorFormulario: FormBuilder, 
     private enrutador: Router,
-    private servAuth: Auth
+    private servAuth: Auth,
+    private cdr: ChangeDetectorRef
   ) {
     this.formularioRegistro = this.constructorFormulario.group({
       nombre: ['', Validators.required],
@@ -41,6 +43,7 @@ export class Registro {
 
   alEnviar() {
     if (this.formularioRegistro.valid) {
+      this.mensajeError = '';
       const formData = new FormData();
       formData.append('nombre', this.formularioRegistro.value.nombre);
       formData.append('apellido', this.formularioRegistro.value.apellido);
@@ -60,8 +63,8 @@ export class Registro {
           this.enrutador.navigate(['/publicaciones']);
         },
         error: (error) => {
-          console.error(error);
-          alert('Error al registrarse');
+          this.mensajeError = 'Error al registrarse. Verificá los datos ingresados.';
+          this.cdr.detectChanges();
         }
       });
     }

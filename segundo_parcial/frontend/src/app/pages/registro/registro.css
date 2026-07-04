@@ -31,3 +31,10 @@
   width: 60px;
   margin: 0 auto 16px auto;
 }
+
+.mensaje-error {
+  color: #e53e3e;
+  font-size: 14px;
+  margin-top: 8px;
+  text-align: center;
+}

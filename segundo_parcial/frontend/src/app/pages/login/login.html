@@ -22,6 +22,10 @@
 
     <button class="btn-primario" type="submit" [disabled]="formularioLogin.invalid">Ingresar</button>
 
+    @if (mensajeError) {
+      <div class="mensaje-error">{{ mensajeError }}</div>
+    }
+
   </form>
 
   <p>¿No tenés cuenta? <a (click)="irARegistro()">Registrate</a></p>
