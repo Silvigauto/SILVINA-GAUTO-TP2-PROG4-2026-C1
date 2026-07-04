@@ -58,26 +58,28 @@ export class PublicacionesPage implements OnInit, OnDestroy {
   this.cargandoMas = true;
   this.offset += this.limite;
 
-  setTimeout(() => {
-    this.servPublicaciones.listar(this.ordenActual, this.limite, this.offset).subscribe({
-      next: (respuesta: any) => {
-        if (respuesta.length > 0) {
-          this.listadoPublicaciones = [...this.listadoPublicaciones, ...respuesta];
-          this.cdr.detectChanges();
-        } else {
-          this.offset -= this.limite;
-          window.removeEventListener('scroll', this.alScrollear.bind(this));
-        }
-        this.cargandoMas = false;
+  this.servPublicaciones.listar(this.ordenActual, this.limite, this.offset).subscribe({
+    next: (respuesta: any) => {
+      if (respuesta.length > 0) {
+        this.listadoPublicaciones = [...this.listadoPublicaciones, ...respuesta];
         this.cdr.detectChanges();
-      },
-      error: (error) => {
-        console.error(error);
-        this.cargandoMas = false;
-        this.cdr.detectChanges();
+      } else {
+        this.offset -= this.limite;
+        window.removeEventListener('scroll', this.alScrollear.bind(this));
       }
-    });
-  }, 500);
+      setTimeout(() => {
+        this.cargandoMas = false;
+        this.cdr.detectChanges();
+      }, 3000);
+    },
+    error: (error) => {
+      console.error(error);
+      setTimeout(() => {
+        this.cargandoMas = false;
+        this.cdr.detectChanges();
+      }, 3000);
+    }
+  });
 }
 
   alSeleccionarImagen(evento: Event) {
