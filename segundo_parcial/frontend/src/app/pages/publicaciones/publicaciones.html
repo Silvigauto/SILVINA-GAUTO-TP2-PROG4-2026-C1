@@ -6,20 +6,21 @@
     <input type="file" accept="image/*" (change)="alSeleccionarImagen($event)" #inputImagen/>
     <button class="btn-primario" (click)="crearPublicacion()">Publicar</button>
   </div>
+
   <div class="ordenamiento">
-  <button 
-    [class.btn-primario]="ordenActual === 'fecha'"
-    [class.btn-secundario]="ordenActual !== 'fecha'"
-    (click)="cambiarOrden('fecha')">
-    Más recientes
-  </button>
-  <button 
-    [class.btn-primario]="ordenActual === 'likes'"
-    [class.btn-secundario]="ordenActual !== 'likes'"
-    (click)="cambiarOrden('likes')">
-    Más populares
-  </button>
-</div>
+    <button 
+      [class.btn-primario]="ordenActual === 'fecha'"
+      [class.btn-secundario]="ordenActual !== 'fecha'"
+      (click)="cambiarOrden('fecha')">
+      Más recientes
+    </button>
+    <button 
+      [class.btn-primario]="ordenActual === 'likes'"
+      [class.btn-secundario]="ordenActual !== 'likes'"
+      (click)="cambiarOrden('likes')">
+      Más populares
+    </button>
+  </div>
 
   <div class="lista-publicaciones">
     @if (listadoPublicaciones.length === 0) {
@@ -27,44 +28,14 @@
     }
 
     @for (publicacion of listadoPublicaciones; track publicacion._id) {
-      <div class="card publicacion">
-        <div class="publicacion-header">
-          <strong [tooltipUsuario]="publicacion.usuario" (click)="verPerfil(publicacion.usuario?._id)" style="cursor: pointer;">
-        {{ publicacion.usuario?.nombre }} {{ publicacion.usuario?.apellido }}
-      </strong>
-          <span class="texto-secundario">{{ publicacion.createdAt | tiempoTranscurrido }}</span>
-        </div>
-        <h3>{{ publicacion.titulo }}</h3>
-        @if (publicacion.imagen) {
-          <img [src]="publicacion.imagen" alt="imagen de publicacion" class="publicacion-imagen"/>
-        }
-        <p>{{ publicacion.mensaje | truncar:150 }}</p>
-        <div class="publicacion-acciones">
-          <button class="btn-like btn-primario" animacionLike (click)="toggleLike(publicacion)">
-            <lucide-icon [img]="Heart" size="16"></lucide-icon>
-            {{ publicacion.likes.length | likesTexto }}
-          </button>
-          <button class="btn-secundario" (click)="verPublicacion(publicacion._id)">
-            <lucide-icon [img]="Eye" size="16"></lucide-icon>
-            Ver
-          </button>
-          @if (publicacion.usuario?._id?.toString() === usuarioActual._id?.toString() || usuarioActual.rol === 'administrador') {
-            <button class="btn-peligro"
-              confirmarAccion
-              mensajeConfirmacion="¿Estás seguro que querés eliminar esta publicación?"
-              (accionConfirmada)="eliminar(publicacion._id)">
-              <lucide-icon [img]="Trash2" size="16"></lucide-icon>
-              Eliminar
-            </button>
-          }
-        </div>
-      </div>
+      <app-publicacion-card
+  [publicacion]="publicacion"
+  [usuarioActual]="usuarioActual"
+  (alDarLike)="toggleLike($event)"
+  (alEliminar)="eliminar($event)"
+  (alVer)="verPublicacion($event)"
+  (alVerPerfil)="verPerfil($event)">
+</app-publicacion-card>
     }
   </div>
-  @if (cargandoMas) {
-  <div class="cargando-mas">
-    <div class="spinner-mini"></div>
-    <p class="texto-secundario">Cargando más...</p>
-  </div>
-  }
 </div>

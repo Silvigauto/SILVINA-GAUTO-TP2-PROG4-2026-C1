@@ -1,0 +1,55 @@
+.publicacion-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.publicacion-header strong {
+  font-family: 'Segoe UI', sans-serif;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.publicacion h3 {
+  margin-bottom: 8px;
+  font-family: 'Segoe UI', sans-serif;
+  font-weight: 400;
+}
+
+.publicacion-imagen {
+  width: 100%;
+  max-height: 400px;
+  object-fit: cover;
+  border-radius: 4px;
+  margin-bottom: 12px;
+}
+
+.publicacion p {
+  margin-bottom: 12px;
+  font-size: 14px;
+  color: #444;
+  font-family: 'Segoe UI', sans-serif;
+  font-weight: 400;
+}
+
+.publicacion-acciones {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.btn-like {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  font-size: 13px;
+}
+
+.btn-secundario, .btn-peligro {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  font-size: 13px;
+}

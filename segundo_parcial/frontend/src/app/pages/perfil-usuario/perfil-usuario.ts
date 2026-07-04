@@ -1,13 +1,14 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { CommonModule, DatePipe } from '@angular/common';
+import { ActivatedRoute, Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
 import { Usuarios } from '../../services/usuarios';
 import { Publicaciones } from '../../services/publicaciones';
+import { PublicacionCardComponent } from '../../components/publicacion-card/publicacion-card';
 
 @Component({
   selector: 'app-perfil-usuario',
   standalone: true,
-  imports: [CommonModule, DatePipe],
+  imports: [CommonModule, PublicacionCardComponent],
   templateUrl: './perfil-usuario.html',
   styleUrl: './perfil-usuario.css'
 })
@@ -18,6 +19,7 @@ export class PerfilUsuario implements OnInit {
 
   constructor(
     private ruta: ActivatedRoute,
+    private enrutador: Router,
     private servUsuarios: Usuarios,
     private servPublicaciones: Publicaciones,
     private cdr: ChangeDetectorRef
@@ -48,13 +50,34 @@ export class PerfilUsuario implements OnInit {
       error: (error) => console.error(error)
     });
   }
+
+  toggleLike(publicacion: any) {
+    const yaLikeo = publicacion.likes.includes(this.usuarioActual._id);
+    if (yaLikeo) {
+      this.servPublicaciones.quitarLike(publicacion._id).subscribe({
+        next: () => this.cargarPublicaciones(this.ruta.snapshot.paramMap.get('id') || ''),
+        error: (error) => console.error(error)
+      });
+    } else {
+      this.servPublicaciones.darLike(publicacion._id).subscribe({
+        next: () => this.cargarPublicaciones(this.ruta.snapshot.paramMap.get('id') || ''),
+        error: (error) => console.error(error)
+      });
+    }
+  }
+
   eliminar(id: string) {
-  this.servPublicaciones.eliminar(id).subscribe({
-    next: () => {
-      const usuarioId = this.ruta.snapshot.paramMap.get('id') || '';
-      this.cargarPublicaciones(usuarioId);
-    },
-    error: (error) => console.error(error)
-  });
-}
+    this.servPublicaciones.eliminar(id).subscribe({
+      next: () => this.cargarPublicaciones(this.ruta.snapshot.paramMap.get('id') || ''),
+      error: (error) => console.error(error)
+    });
+  }
+
+  verPublicacion(id: string) {
+    this.enrutador.navigate(['/publicacion', id]);
+  }
+
+  verPerfil(id: string) {
+    this.enrutador.navigate(['/perfil', id]);
+  }
 }

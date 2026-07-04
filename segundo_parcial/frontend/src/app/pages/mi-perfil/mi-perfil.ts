@@ -1,11 +1,13 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { Publicaciones } from '../../services/publicaciones';
+import { PublicacionCardComponent } from '../../components/publicacion-card/publicacion-card';
 
 @Component({
   selector: 'app-mi-perfil',
   standalone: true,
-  imports: [CommonModule, DatePipe],
+  imports: [CommonModule, PublicacionCardComponent],
   templateUrl: './mi-perfil.html',
   styleUrl: './mi-perfil.css'
 })
@@ -15,6 +17,7 @@ export class MiPerfil implements OnInit {
 
   constructor(
     private servPublicaciones: Publicaciones,
+    private enrutador: Router,
     private cdr: ChangeDetectorRef
   ) {}
 
@@ -42,5 +45,35 @@ export class MiPerfil implements OnInit {
         error: (error) => console.error(error)
       });
     });
+  }
+
+  toggleLike(publicacion: any) {
+    const yaLikeo = publicacion.likes.includes(this.usuario._id);
+    if (yaLikeo) {
+      this.servPublicaciones.quitarLike(publicacion._id).subscribe({
+        next: () => this.cargarMisPublicaciones(),
+        error: (error) => console.error(error)
+      });
+    } else {
+      this.servPublicaciones.darLike(publicacion._id).subscribe({
+        next: () => this.cargarMisPublicaciones(),
+        error: (error) => console.error(error)
+      });
+    }
+  }
+
+  eliminar(id: string) {
+    this.servPublicaciones.eliminar(id).subscribe({
+      next: () => this.cargarMisPublicaciones(),
+      error: (error) => console.error(error)
+    });
+  }
+
+  verPublicacion(id: string) {
+    this.enrutador.navigate(['/publicacion', id]);
+  }
+
+  verPerfil(id: string) {
+    this.enrutador.navigate(['/perfil', id]);
   }
 }

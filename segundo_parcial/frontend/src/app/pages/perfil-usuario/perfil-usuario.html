@@ -18,14 +18,14 @@
       }
 
       @for (publicacion of publicaciones; track publicacion._id) {
-        <div class="card publicacion">
-          <h4>{{ publicacion.titulo }}</h4>
-          <p>{{ publicacion.mensaje }}</p>
-          <p class="texto-secundario">{{ publicacion.createdAt | date:'dd/MM/yyyy' }}</p>
-          @if (usuarioActual.rol === 'administrador') {
-            <button class="btn-peligro" (click)="eliminar(publicacion._id)">Eliminar</button>
-          }
-        </div>
+        <app-publicacion-card
+          [publicacion]="publicacion"
+          [usuarioActual]="usuarioActual"
+          (alDarLike)="toggleLike($event)"
+          (alEliminar)="eliminar($event)"
+          (alVer)="verPublicacion($event)"
+          (alVerPerfil)="verPerfil($event)">
+        </app-publicacion-card>
       }
     </div>
   }

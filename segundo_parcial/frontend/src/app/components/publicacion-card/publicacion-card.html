@@ -1,0 +1,29 @@
+<div class="card publicacion">
+  <div class="publicacion-header">
+    <strong [tooltipUsuario]="publicacion.usuario" (click)="verPerfil()" style="cursor: pointer;">
+  {{ publicacion.usuario?.nombre }} {{ publicacion.usuario?.apellido }}
+</strong>
+    <span class="texto-secundario">{{ publicacion.createdAt | tiempoTranscurrido }}</span>
+  </div>
+  <h3>{{ publicacion.titulo }}</h3>
+  @if (publicacion.imagen) {
+    <img [src]="publicacion.imagen" alt="imagen de publicacion" class="publicacion-imagen"/>
+  }
+  <p>{{ publicacion.mensaje | truncar:150 }}</p>
+  <div class="publicacion-acciones">
+    <button class="btn-like btn-primario" animacionLike (click)="toggleLike()">
+      <lucide-icon [img]="Heart" size="16"></lucide-icon>
+      {{ publicacion.likes.length | likesTexto }}
+    </button>
+    <button class="btn-secundario" (click)="verPublicacion()">
+      <lucide-icon [img]="Eye" size="16"></lucide-icon>
+      Ver
+    </button>
+    @if (publicacion.usuario?._id?.toString() === usuarioActual._id?.toString() || usuarioActual.rol === 'administrador') {
+      <button class="btn-peligro" (click)="eliminar()">
+        <lucide-icon [img]="Trash2" size="16"></lucide-icon>
+        Eliminar
+      </button>
+    }
+  </div>
+</div>

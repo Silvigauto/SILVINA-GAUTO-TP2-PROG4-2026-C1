@@ -17,23 +17,26 @@
     }
 
     @for (publicacion of misPublicaciones; track publicacion._id) {
-      <div class="card publicacion">
-        <h4>{{ publicacion.titulo }}</h4>
-        <p>{{ publicacion.mensaje }}</p>
-        <p class="texto-secundario">{{ publicacion.createdAt | date:'dd/MM/yyyy' }}</p>
+      <app-publicacion-card
+        [publicacion]="publicacion"
+        [usuarioActual]="usuario"
+        (alDarLike)="toggleLike($event)"
+        (alEliminar)="eliminar($event)"
+        (alVer)="verPublicacion($event)"
+        (alVerPerfil)="verPerfil($event)">
+      </app-publicacion-card>
 
-        @if (publicacion.comentarios && publicacion.comentarios.length > 0) {
-          <div class="comentarios-perfil">
-            <strong>Comentarios:</strong>
-            @for (comentario of publicacion.comentarios; track comentario._id) {
-              <div class="comentario-perfil">
-                <span class="texto-secundario">{{ comentario.usuario?.nombre }}:</span>
-                <p>{{ comentario.mensaje }}</p>
-              </div>
-            }
-          </div>
-        }
-      </div>
+      @if (publicacion.comentarios && publicacion.comentarios.length > 0) {
+        <div class="comentarios-perfil card">
+          <strong>Comentarios:</strong>
+          @for (comentario of publicacion.comentarios; track comentario._id) {
+            <div class="comentario-perfil">
+              <span class="texto-secundario">{{ comentario.usuario?.nombre }}:</span>
+              <p>{{ comentario.mensaje }}</p>
+            </div>
+          }
+        </div>
+      }
     }
   </div>
 </div>

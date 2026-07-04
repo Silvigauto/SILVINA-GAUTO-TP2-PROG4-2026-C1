@@ -10,11 +10,12 @@ import { ResaltarEditadoDirective } from '../../directives/resaltar-editado';
 import { TooltipUsuarioDirective } from '../../directives/tooltip-usuario';
 import { AnimacionLikeDirective } from '../../directives/animacion-like';
 import { LucideAngularModule, Heart, Eye, Trash2 } from 'lucide-angular';
+import { PublicacionCardComponent } from '../../components/publicacion-card/publicacion-card';
 
 @Component({
   selector: 'app-publicaciones',
   standalone: true,
-  imports: [CommonModule, FormsModule, LikesTextoPipe, TiempoTranscurridoPipe, TruncarPipe,TooltipUsuarioDirective, AnimacionLikeDirective, LucideAngularModule],
+  imports: [CommonModule, FormsModule, LucideAngularModule, PublicacionCardComponent],
   templateUrl: './publicaciones.html',
   styleUrl: './publicaciones.css'
 })
@@ -67,17 +68,13 @@ export class PublicacionesPage implements OnInit, OnDestroy {
         this.offset -= this.limite;
         window.removeEventListener('scroll', this.alScrollear.bind(this));
       }
-      setTimeout(() => {
-        this.cargandoMas = false;
-        this.cdr.detectChanges();
-      }, 3000);
+      this.cargandoMas = false;
+      this.cdr.detectChanges();
     },
     error: (error) => {
       console.error(error);
-      setTimeout(() => {
-        this.cargandoMas = false;
-        this.cdr.detectChanges();
-      }, 3000);
+      this.cargandoMas = false;
+      this.cdr.detectChanges();
     }
   });
 }
@@ -157,4 +154,5 @@ export class PublicacionesPage implements OnInit, OnDestroy {
   verPerfil(id: string) {
   this.enrutador.navigate(['/perfil', id]);
 }
+
 }
