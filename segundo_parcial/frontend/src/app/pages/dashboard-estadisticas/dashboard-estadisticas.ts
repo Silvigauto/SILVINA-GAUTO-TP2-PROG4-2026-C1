@@ -41,54 +41,54 @@ export class DashboardEstadisticas implements OnInit {
       this.enrutador.navigate(['/publicaciones']);
     }
     const hoy = new Date();
-const hace8dias = new Date();
-hace8dias.setDate(hoy.getDate() - 8);
-this.hasta = hoy.toISOString().split('T')[0];
-this.desde = hace8dias.toISOString().split('T')[0];
-    this.cargarEstadisticas();
+    const hace8dias = new Date();
+    hace8dias.setDate(hoy.getDate() - 8);
+    this.hasta = hoy.toISOString().split('T')[0];
+    this.desde = hace8dias.toISOString().split('T')[0];
+        this.cargarEstadisticas();
   }
 
- ajustarFechas() {
-  const desde = this.desde + 'T00:00:00.000Z';
-  const hasta = this.hasta + 'T23:59:59.999Z';
-  return { desde, hasta };
-}
+  ajustarFechas() {
+    const desde = this.desde + 'T03:00:00.000Z';
+    const hasta = this.hasta + 'T02:59:59.999Z';
+    return { desde, hasta };
+  }
 
-cargarEstadisticas() {
-  
-  const { desde, hasta } = this.ajustarFechas();
-  console.log('desde:', desde);
-  console.log('hasta:', hasta);
-  this.servEstadisticas.publicacionesPorUsuario(desde, hasta).subscribe({
-    next: (respuesta: any) => { this.datosPublicaciones = respuesta; this.renderizarGraficoPublicaciones(); },
-    error: (error) => console.error(error)
-  });
+  cargarEstadisticas() {
+    
+    const { desde, hasta } = this.ajustarFechas();
+    console.log('desde:', desde);
+    console.log('hasta:', hasta);
+    this.servEstadisticas.publicacionesPorUsuario(desde, hasta).subscribe({
+      next: (respuesta: any) => { this.datosPublicaciones = respuesta; this.renderizarGraficoPublicaciones(); },
+      error: (error) => console.error(error)
+    });
 
-  this.servEstadisticas.comentariosPorTiempo(desde, hasta).subscribe({
-    next: (respuesta: any) => { this.datosComentariosTiempo = respuesta; this.renderizarGraficoComentariosTiempo(); },
-    error: (error) => console.error(error)
-  });
+    this.servEstadisticas.comentariosPorTiempo(desde, hasta).subscribe({
+      next: (respuesta: any) => { this.datosComentariosTiempo = respuesta; this.renderizarGraficoComentariosTiempo(); },
+      error: (error) => console.error(error)
+    });
 
-  this.servEstadisticas.comentariosPorPublicacion(desde, hasta).subscribe({
-    next: (respuesta: any) => { this.datosComentariosPublicacion = respuesta; this.renderizarGraficoComentariosPublicacion(); },
-    error: (error) => console.error(error)
-  });
+    this.servEstadisticas.comentariosPorPublicacion(desde, hasta).subscribe({
+      next: (respuesta: any) => { this.datosComentariosPublicacion = respuesta; this.renderizarGraficoComentariosPublicacion(); },
+      error: (error) => console.error(error)
+    });
 
-  this.servEstadisticas.loginsPorUsuario(desde, hasta).subscribe({
-    next: (respuesta: any) => { this.datosLogins = respuesta; this.renderizarGraficoLogins(); },
-    error: (error) => console.error(error)
-  });
+    this.servEstadisticas.loginsPorUsuario(desde, hasta).subscribe({
+      next: (respuesta: any) => { this.datosLogins = respuesta; this.renderizarGraficoLogins(); },
+      error: (error) => console.error(error)
+    });
 
-  this.servEstadisticas.visitasPorPerfil(desde, hasta).subscribe({
-    next: (respuesta: any) => { this.datosVisitas = respuesta; this.renderizarGraficoVisitas(); },
-    error: (error) => console.error(error)
-  });
+    this.servEstadisticas.visitasPorPerfil(desde, hasta).subscribe({
+      next: (respuesta: any) => { this.datosVisitas = respuesta; this.renderizarGraficoVisitas(); },
+      error: (error) => console.error(error)
+    });
 
-  this.servEstadisticas.likesPorDia(desde, hasta).subscribe({
-    next: (respuesta: any) => { this.datosLikes = respuesta; this.renderizarGraficoLikes(); },
-    error: (error) => console.error(error)
-  });
-}
+    this.servEstadisticas.likesPorDia(desde, hasta).subscribe({
+      next: (respuesta: any) => { this.datosLikes = respuesta; this.renderizarGraficoLikes(); },
+      error: (error) => console.error(error)
+    });
+  }
 
   renderizarGraficoPublicaciones() {
     if (this.graficoPublicaciones) this.graficoPublicaciones.destroy();
