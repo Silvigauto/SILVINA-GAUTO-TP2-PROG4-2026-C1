@@ -38,7 +38,16 @@
 
     <div class="grupo-campo">
       <label>Contraseña</label>
-      <input type="password" formControlName="contrasena" placeholder="Contraseña"/>
+      <div class="campo-contrasena">
+        <input [type]="mostrarContrasena ? 'text' : 'password'" formControlName="contrasena" placeholder="Contraseña"/>
+        <span class="btn-ojo" (click)="mostrarContrasena = !mostrarContrasena">
+          @if (mostrarContrasena) {
+            <lucide-icon [img]="EyeOff" size="18"></lucide-icon>
+          } @else {
+            <lucide-icon [img]="Eye" size="18"></lucide-icon>
+          }
+        </span>
+      </div>
       @if (formularioRegistro.get('contrasena')?.invalid && formularioRegistro.get('contrasena')?.touched) {
         <span>La contraseña debe tener al menos 8 caracteres, una mayúscula y un número</span>
       }
@@ -46,7 +55,16 @@
 
     <div class="grupo-campo">
       <label>Repetir contraseña</label>
-      <input type="password" formControlName="repetirContrasena" placeholder="Repetir contraseña"/>
+      <div class="campo-contrasena">
+        <input [type]="mostrarRepetirContrasena ? 'text' : 'password'" formControlName="repetirContrasena" placeholder="Repetir contraseña"/>
+        <span class="btn-ojo" (click)="mostrarRepetirContrasena = !mostrarRepetirContrasena">
+          @if (mostrarRepetirContrasena) {
+            <lucide-icon [img]="EyeOff" size="18"></lucide-icon>
+          } @else {
+            <lucide-icon [img]="Eye" size="18"></lucide-icon>
+          }
+        </span>
+      </div>
     </div>
 
     <div class="grupo-campo">
@@ -64,7 +82,7 @@
       <input type="file" accept="image/*" (change)="alSeleccionarImagen($event)"/>
     </div>
 
-    <button class="btn-primario" type="submit" [disabled]="formularioRegistro.invalid">Registrarse</button>
+    <button class="btn-primario" type="submit" [disabled]="formularioRegistro.invalid || !imagenPerfil">Registrarse</button>
 
     @if (mensajeError) {
       <div class="mensaje-error">{{ mensajeError }}</div>

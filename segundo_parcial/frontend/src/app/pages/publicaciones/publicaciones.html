@@ -1,10 +1,16 @@
 <div class="contenedor-publicaciones">
   <div class="formulario-publicacion card">
+
     <h3 class="titulo-seccion">Nueva publicación</h3>
     <input type="text" [(ngModel)]="nuevaPublicacion.titulo" placeholder="Título"/>
     <textarea [(ngModel)]="nuevaPublicacion.mensaje" placeholder="¿Qué estás pensando?"></textarea>
     <input type="file" accept="image/*" (change)="alSeleccionarImagen($event)" #inputImagen/>
+
     <button class="btn-primario" (click)="crearPublicacion()">Publicar</button>
+    
+    @if (mensajeError) {
+      <div class="mensaje-error">{{ mensajeError }}</div>
+    }
   </div>
 
   <div class="ordenamiento">
@@ -29,13 +35,13 @@
 
     @for (publicacion of listadoPublicaciones; track publicacion._id) {
       <app-publicacion-card
-  [publicacion]="publicacion"
-  [usuarioActual]="usuarioActual"
-  (alDarLike)="toggleLike($event)"
-  (alEliminar)="eliminar($event)"
-  (alVer)="verPublicacion($event)"
-  (alVerPerfil)="verPerfil($event)">
-</app-publicacion-card>
+        [publicacion]="publicacion"
+        [usuarioActual]="usuarioActual"
+        (alDarLike)="toggleLike($event)"
+        (alEliminar)="eliminar($event)"
+        (alVer)="verPublicacion($event)"
+        (alVerPerfil)="verPerfil($event)">
+      </app-publicacion-card>
     }
   </div>
 </div>

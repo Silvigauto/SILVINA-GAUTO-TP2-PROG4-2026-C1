@@ -1,8 +1,9 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException,BadRequestException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Usuario } from '../auth/entities/usuario.schema';
 import { Visita } from '../auth/entities/visita.schema';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsuariosService {
@@ -26,8 +27,19 @@ export class UsuariosService {
   }
 
   async crear(datos: any) {
-    const usuario = await this.usuarioModel.create(datos);
-    return usuario;
+    try {
+      const contrasenaEncriptada = await bcrypt.hash(datos.contrasena, 10);
+      const usuario = await this.usuarioModel.create({
+        ...datos,
+        contrasena: contrasenaEncriptada,
+      });
+      return usuario;
+    } catch (error: any) {
+      if (error.code === 11000) {
+        throw new BadRequestException('El email o nombre de usuario ya existe');
+      }
+      throw new BadRequestException('Error al crear el usuario');
+    }
   }
 
   async obtenerUno(id: string, visitanteId?: string) {

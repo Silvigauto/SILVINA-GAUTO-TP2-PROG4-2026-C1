@@ -22,6 +22,7 @@ export class Publicacion implements OnInit {
   hayMas = true;
   comentarioEditandoId: string | null = null;
   mensajeEditando: string = '';
+  
   publicacion: any = null;
 
   constructor(

@@ -6,27 +6,68 @@
   @if (mostrarFormulario) {
     <div class="card formulario-usuario">
       <h3 class="titulo-seccion">Nuevo usuario</h3>
-      <input type="text" [(ngModel)]="nuevoUsuario.nombre" placeholder="Nombre"/>
-      <input type="text" [(ngModel)]="nuevoUsuario.apellido" placeholder="Apellido"/>
-      <input type="email" [(ngModel)]="nuevoUsuario.email" placeholder="Correo"/>
-      <input type="text" [(ngModel)]="nuevoUsuario.username" placeholder="Nombre de usuario"/>
-      <input type="password" [(ngModel)]="nuevoUsuario.contrasena" placeholder="Contraseña"/>
-      <input type="date" [(ngModel)]="nuevoUsuario.fechaNacimiento"/>
-      <textarea [(ngModel)]="nuevoUsuario.descripcion" placeholder="Descripción"></textarea>
-      <div class="grupo-campo">
-  <label>Rol</label>
-  <div class="radio-grupo">
-    <label>
-      <input type="radio" [(ngModel)]="nuevoUsuario.rol" value="usuario"/>
-      Usuario
-    </label>
-    <label>
-      <input type="radio" [(ngModel)]="nuevoUsuario.rol" value="administrador"/>
-      Administrador
-    </label>
-  </div>
-</div>
-      <button class="btn-primario" (click)="crearUsuario()">Crear</button>
+      <form [formGroup]="formularioUsuario" (ngSubmit)="crearUsuario()">
+        <div class="grupo-campo">
+          <label>Nombre</label>
+          <input type="text" formControlName="nombre" placeholder="Nombre"/>
+          @if (formularioUsuario.get('nombre')?.invalid && formularioUsuario.get('nombre')?.touched) {
+            <span class="texto-error">El nombre es requerido</span>
+          }
+        </div>
+        <div class="grupo-campo">
+          <label>Apellido</label>
+          <input type="text" formControlName="apellido" placeholder="Apellido"/>
+          @if (formularioUsuario.get('apellido')?.invalid && formularioUsuario.get('apellido')?.touched) {
+            <span class="texto-error">El apellido es requerido</span>
+          }
+        </div>
+        <div class="grupo-campo">
+          <label>Correo</label>
+          <input type="email" formControlName="email" placeholder="Correo"/>
+          @if (formularioUsuario.get('email')?.invalid && formularioUsuario.get('email')?.touched) {
+            <span class="texto-error">El correo no es válido</span>
+          }
+        </div>
+        <div class="grupo-campo">
+          <label>Nombre de usuario</label>
+          <input type="text" formControlName="username" placeholder="Nombre de usuario"/>
+          @if (formularioUsuario.get('username')?.invalid && formularioUsuario.get('username')?.touched) {
+            <span class="texto-error">El nombre de usuario es requerido</span>
+          }
+        </div>
+        <div class="grupo-campo">
+          <label>Contraseña</label>
+          <input type="password" formControlName="contrasena" placeholder="Contraseña"/>
+          @if (formularioUsuario.get('contrasena')?.invalid && formularioUsuario.get('contrasena')?.touched) {
+            <span class="texto-error">La contraseña debe tener al menos 8 caracteres, una mayúscula y un número</span>
+          }
+        </div>
+        <div class="grupo-campo">
+          <label>Fecha de nacimiento</label>
+          <input type="date" formControlName="fechaNacimiento"/>
+        </div>
+        <div class="grupo-campo">
+          <label>Descripción</label>
+          <textarea formControlName="descripcion" placeholder="Descripción"></textarea>
+        </div>
+        <div class="grupo-campo">
+          <label>Rol</label>
+          <div class="radio-grupo">
+            <label>
+              <input type="radio" formControlName="rol" value="usuario"/>
+              Usuario
+            </label>
+            <label>
+              <input type="radio" formControlName="rol" value="administrador"/>
+              Administrador
+            </label>
+          </div>
+        </div>
+        <button class="btn-primario" type="submit" [disabled]="formularioUsuario.invalid">Crear</button>
+        @if (mensajeError) {
+          <div class="mensaje-error">{{ mensajeError }}</div>
+        }
+      </form>
     </div>
   }
 

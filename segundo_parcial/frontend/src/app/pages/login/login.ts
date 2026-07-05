@@ -3,17 +3,22 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Auth } from '../../services/auth';
+import { LucideAngularModule, Eye, EyeOff } from 'lucide-angular';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule,LucideAngularModule],
   templateUrl: './login.html',
   styleUrl: './login.css'
 })
+
 export class Login {
   formularioLogin: FormGroup;
   mensajeError: string = '';
+  readonly Eye = Eye;
+  readonly EyeOff = EyeOff;
+  mostrarContrasena = false;
 
   constructor(
     private constructorFormulario: FormBuilder,
@@ -38,8 +43,11 @@ export class Login {
           this.enrutador.navigate(['/publicaciones']);
         },
         error: (error) => {
-          console.error(error);
-          this.mensajeError = 'Usuario o contraseña incorrectos';
+          if (error.error?.message === 'Tu cuenta está deshabilitada') {
+            this.mensajeError = 'Tu cuenta está deshabilitada';
+          } else {
+            this.mensajeError = 'Usuario o contraseña incorrectos';
+          }
           this.cdr.detectChanges();
         }
       });

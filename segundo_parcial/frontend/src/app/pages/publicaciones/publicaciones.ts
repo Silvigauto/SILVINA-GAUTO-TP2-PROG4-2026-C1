@@ -25,6 +25,7 @@ export class PublicacionesPage implements OnInit, OnDestroy {
   offset = 0;
   limite = 10;
   nuevaPublicacion = { titulo: '', mensaje: '' };
+  mensajeError: string = '';
   imagenPublicacion: File | null = null;
   ordenActual: string = 'fecha';
   cargandoMas = false;
@@ -87,26 +88,31 @@ export class PublicacionesPage implements OnInit, OnDestroy {
   }
 
   crearPublicacion() {
-    if (this.nuevaPublicacion.titulo && this.nuevaPublicacion.mensaje) {
-      const formData = new FormData();
-      formData.append('titulo', this.nuevaPublicacion.titulo);
-      formData.append('mensaje', this.nuevaPublicacion.mensaje);
-      if (this.imagenPublicacion) {
-        formData.append('imagen', this.imagenPublicacion);
-      }
-
-      this.servPublicaciones.crear(formData).subscribe({
-        next: () => {
-          this.nuevaPublicacion = { titulo: '', mensaje: '' };
-          this.imagenPublicacion = null;
-          if (this.inputImagen) this.inputImagen.nativeElement.value = '';
-          this.offset = 0;
-          this.cargarPublicaciones();
-          this.cdr.detectChanges();
-        },
-        error: (error) => console.error(error)
-      });
+    if (!this.nuevaPublicacion.titulo || !this.nuevaPublicacion.mensaje) {
+      this.mensajeError = 'El título y el texto son obligatorios';
+      this.cdr.detectChanges();
+      return;
     }
+
+    this.mensajeError = '';
+    const formData = new FormData();
+    formData.append('titulo', this.nuevaPublicacion.titulo);
+    formData.append('mensaje', this.nuevaPublicacion.mensaje);
+    if (this.imagenPublicacion) {
+      formData.append('imagen', this.imagenPublicacion);
+    }
+
+    this.servPublicaciones.crear(formData).subscribe({
+      next: () => {
+        this.nuevaPublicacion = { titulo: '', mensaje: '' };
+        this.imagenPublicacion = null;
+        if (this.inputImagen) this.inputImagen.nativeElement.value = '';
+        this.offset = 0;
+        this.cargarPublicaciones();
+        this.cdr.detectChanges();
+      },
+      error: (error) => console.error(error)
+    });
   }
 
   cargarPublicaciones() {

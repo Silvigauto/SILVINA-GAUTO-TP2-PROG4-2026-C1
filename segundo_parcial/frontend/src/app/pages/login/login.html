@@ -14,7 +14,16 @@
 
     <div class="grupo-campo">
       <label>Contraseña</label>
-      <input type="password" formControlName="contrasena" placeholder="Contraseña"/>
+      <div class="campo-contrasena">
+        <input [type]="mostrarContrasena ? 'text' : 'password'" formControlName="contrasena" placeholder="Contraseña"/>
+        <span class="btn-ojo" (click)="mostrarContrasena = !mostrarContrasena">
+          @if (mostrarContrasena) {
+            <lucide-icon [img]="EyeOff" size="18"></lucide-icon>
+          } @else {
+            <lucide-icon [img]="Eye" size="18"></lucide-icon>
+          }
+        </span>
+      </div>
       @if (formularioLogin.get('contrasena')?.invalid && formularioLogin.get('contrasena')?.touched) {
         <span>La contraseña debe tener al menos 8 caracteres</span>
       }

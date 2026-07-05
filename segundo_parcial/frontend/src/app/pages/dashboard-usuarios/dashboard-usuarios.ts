@@ -1,13 +1,13 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Usuarios } from '../../services/usuarios';
 
 @Component({
   selector: 'app-dashboard-usuarios',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './dashboard-usuarios.html',
   styleUrl: './dashboard-usuarios.css'
 })
@@ -15,22 +15,26 @@ export class DashboardUsuarios implements OnInit {
   listadoUsuarios: any[] = [];
   usuarioActual: any = JSON.parse(localStorage.getItem('usuario') || '{}');
   mostrarFormulario = false;
-  nuevoUsuario = {
-    nombre: '',
-    apellido: '',
-    email: '',
-    username: '',
-    contrasena: '',
-    fechaNacimiento: '',
-    descripcion: '',
-    rol: 'usuario'
-  };
+  mensajeError: string = '';
+  formularioUsuario: FormGroup;
 
   constructor(
     private servUsuarios: Usuarios,
     private enrutador: Router,
-    private cdr: ChangeDetectorRef
-  ) {}
+    private cdr: ChangeDetectorRef,
+    private constructorFormulario: FormBuilder
+  ) {
+    this.formularioUsuario = this.constructorFormulario.group({
+      nombre: ['', Validators.required],
+      apellido: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      username: ['', Validators.required],
+      contrasena: ['', [Validators.required, Validators.minLength(8), Validators.pattern(/(?=.*[A-Z])(?=.*[0-9])/)]],
+      fechaNacimiento: ['', Validators.required],
+      descripcion: ['', Validators.required],
+      rol: ['usuario', Validators.required]
+    });
+  }
 
   ngOnInit() {
     if (this.usuarioActual.rol !== 'administrador') {
@@ -50,14 +54,24 @@ export class DashboardUsuarios implements OnInit {
   }
 
   crearUsuario() {
-    const datos = { ...this.nuevoUsuario, contraseña: this.nuevoUsuario.contrasena };
+    if (this.formularioUsuario.invalid) return;
+
+    this.mensajeError = '';
+    const datos = this.formularioUsuario.value;
     this.servUsuarios.crear(datos).subscribe({
       next: () => {
         this.mostrarFormulario = false;
-        this.nuevoUsuario = { nombre: '', apellido: '', email: '', username: '', contrasena: '', fechaNacimiento: '', descripcion: '', rol: 'usuario' };
+        this.formularioUsuario.reset({ rol: 'usuario' });
         this.cargarUsuarios();
       },
-      error: (error) => console.error(error)
+      error: (error) => {
+        if (error.status === 400) {
+          this.mensajeError = 'El email o nombre de usuario ya existe';
+        } else {
+          this.mensajeError = 'Error al crear el usuario';
+        }
+        this.cdr.detectChanges();
+      }
     });
   }
 

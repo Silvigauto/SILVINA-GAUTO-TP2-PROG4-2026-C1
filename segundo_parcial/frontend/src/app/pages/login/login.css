@@ -41,3 +41,27 @@
   margin-top: 8px;
   text-align: center;
 }
+
+
+.campo-contrasena {
+  display: flex;
+  align-items: center;
+  border-bottom: 2px solid #E8D5A3;
+  width: 100%;
+}
+
+.campo-contrasena input {
+  flex: 1;
+  width: auto;
+  border: none;
+  outline: none;
+  padding: 10px 0;
+}
+
+.btn-ojo {
+  background: transparent;
+  color: #666;
+  padding: 4px;
+  border: none;
+  cursor: pointer;
+}

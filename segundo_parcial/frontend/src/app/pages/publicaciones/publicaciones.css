@@ -99,3 +99,9 @@
   border-radius: 50%;
   animation: girar 0.8s linear infinite;
 }
+
+.mensaje-error {
+  color: #e53e3e;
+  font-size: 14px;
+  margin-top: 8px;
+}

@@ -3,11 +3,12 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { Router } from '@angular/router';
 import { Auth } from '../../services/auth';
 import { CommonModule } from '@angular/common';
+import { LucideAngularModule, Eye, EyeOff } from 'lucide-angular';
 
 @Component({
   selector: 'app-registro',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule,LucideAngularModule],
   templateUrl: './registro.html',
   styleUrl: './registro.css'
 })
@@ -15,6 +16,10 @@ export class Registro {
   formularioRegistro: FormGroup;
   imagenPerfil: File | null = null;
   mensajeError: string = '';
+  readonly Eye = Eye;
+  readonly EyeOff = EyeOff;
+  mostrarContrasena = false;
+  mostrarRepetirContrasena = false;
 
   constructor(
     private constructorFormulario: FormBuilder, 
