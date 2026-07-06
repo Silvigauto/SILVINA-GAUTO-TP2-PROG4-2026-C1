@@ -6,7 +6,7 @@ import { environment } from '../../environments/environment';
   providedIn: 'root'
 })
 export class Auth {
-  private url = environment.apiUrl;
+  private url = environment.apiUrl; //url del backend
   loginExitoso = new EventEmitter<void>();
 
 

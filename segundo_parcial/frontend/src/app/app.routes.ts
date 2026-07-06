@@ -23,6 +23,7 @@ export const routes: Routes = [
   { path: 'dashboard-usuarios', component: DashboardUsuarios, canActivate: [authGuard] },
   { path: 'dashboard-estadisticas', component: DashboardEstadisticas, canActivate: [authGuard] },
   { path: 'dashboard-usuarios', component: DashboardUsuarios, canActivate: [authGuard, adminGuard] },
-{ path: 'dashboard-estadisticas', component: DashboardEstadisticas, canActivate: [authGuard, adminGuard] },
-{ path: 'perfil/:id', component: PerfilUsuario, canActivate: [authGuard] },
+  { path: 'dashboard-estadisticas', component: DashboardEstadisticas, canActivate: [authGuard, adminGuard] },
+  { path: 'perfil/:id', component: PerfilUsuario, canActivate: [authGuard] },
+  { path: '**', redirectTo: 'cargando' }
 ];

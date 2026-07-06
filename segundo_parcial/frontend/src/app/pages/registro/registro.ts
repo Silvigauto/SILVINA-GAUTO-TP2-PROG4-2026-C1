@@ -1,7 +1,7 @@
 import { Component, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Auth } from '../../services/auth';
+import { Auth } from '../../services/auth'; //conecta con el auth del frontend que conecta con el backend
 import { CommonModule } from '@angular/common';
 import { LucideAngularModule, Eye, EyeOff } from 'lucide-angular';
 
@@ -24,7 +24,7 @@ export class Registro {
   constructor(
     private constructorFormulario: FormBuilder, 
     private enrutador: Router,
-    private servAuth: Auth,
+    private servAuth: Auth, //conecta con el auth 
     private cdr: ChangeDetectorRef
   ) {
     this.formularioRegistro = this.constructorFormulario.group({
@@ -57,7 +57,7 @@ export class Registro {
       formData.append('contrasena', this.formularioRegistro.value.contrasena);
       formData.append('fechaNacimiento', this.formularioRegistro.value.fechaNacimiento);
       formData.append('descripcion', this.formularioRegistro.value.descripcion);
-      if (this.imagenPerfil) {
+      if (this.imagenPerfil) { // foto opcional, igualmente el boton de registrarse no se activa si no hay una foto puesta, esta en el html
         formData.append('foto', this.imagenPerfil);
       }
 

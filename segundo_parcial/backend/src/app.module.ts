@@ -8,7 +8,8 @@ import { APP_PIPE } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 
-
+// en app se registran todos los modulos (auth, usuarios, publicaciones, cloudinary)
+// se registra la conexion con mongo db
 
 @Module({
   imports: [

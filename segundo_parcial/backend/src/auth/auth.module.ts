@@ -4,7 +4,9 @@ import { AuthService } from './auth.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Usuario, UsuarioSchema } from './entities/usuario.schema';
 import { Login, LoginSchema } from './entities/login.schema';
-import { CloudinaryModule } from '../cloudinary/cloudinary.module';
+import { CloudinaryModule } from '../cloudinary/cloudinary.module'; // para el registro que necesita subir la foto de perfil
+
+// el archivo auth que conecta con las entities y con el controller y service
 
 @Module({
   imports: [
@@ -17,4 +19,4 @@ import { CloudinaryModule } from '../cloudinary/cloudinary.module';
   controllers: [AuthController],
   providers: [AuthService],
 })
-export class AuthModule {}
+export class AuthModule {} // exporta la clase para que la use app.module.ts
